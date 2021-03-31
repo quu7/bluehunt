@@ -1,0 +1,83 @@
+\documentclass[11pt,a4paper,titlepage]{article}
+
+% Font related packages
+\usepackage{fontspec}
+\setmainfont{Lato}
+\setsansfont{Lato}
+\setmonofont{Fira Mono}
+\newfontfamily\greekfont[Script=Greek]{Lato}
+
+% Greek monospace font
+\newfontfamily{\greekfonttt}{Fira Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{greek}
+
+% Math packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{eurosym}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,shapes}
+
+\usepackage{appendix} % Add appendix to document
+\usepackage[margin=3cm]{geometry} % Change page margins
+
+% Table packages
+\usepackage{multirow}
+\usepackage{color, colortbl}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{lscape}
+
+% PDF options
+\usepackage[unicode,hidelinks,pdftitle={Ανάπτυξη συστήματος με υλοποίηση μεθοδολογίας MINORA (UTA) σε περιβάλλον Python με web interface},pdfauthor={Dimitrios Maroulidis, Myron Pachakis},pdfcreator={},pdfproducer={}]{hyperref}
+
+% Colors to use in tables
+\definecolor{LightGray}{gray}{0.95}
+\definecolor{Gray}{gray}{0.9}
+\definecolor{LightRed}{HTML}{ff6b6b}
+%\definecolor{LightBlue}{HTML}{aacfff}
+%\definecolor{LightBlue}{HTML}{5eaeff}
+\definecolor{LightBlue}{HTML}{a7d2ff}
+
+% Table column types for math environments
+\newcolumntype{e}{>{$}c<{$}}
+\renewcommand{\arraystretch}{1.2}
+\usepackage{ragged2e}
+
+% Math font
+\usepackage{unicode-math}
+\setmathfont{Asana Math}
+
+% Use section based numbering for equations.
+% amsmath is needed for this.
+\numberwithin{equation}{section}
+
+% Use comma as decimal point
+%\usepackage{icomma}
+
+% Code highlighting
+\usepackage{minted}
+
+\author{Δημήτριος Μαρουλίδης (\textit{2018010111}) \\
+    Μύρων Παχάκης (\textit{2018010028})}
+\title{Ανάπτυξη συστήματος με υλοποίηση μεθοδολογίας MINORA (UTA) σε περιβάλλον Python με web interface}
+\date{\today}
+
+\begin{document}
+\maketitle	
+\tableofcontents
+%	\listoffigures
+%	\listoftables
+
+\clearpage
+% BEGIN HERE
+
+
+\end{document}
