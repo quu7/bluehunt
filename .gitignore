@@ -517,3 +517,6 @@ TSWLatexianTemp*
 
 # glossaries
 *.glstex
+
+# Ignore PDF of report
+report/report.pdf
