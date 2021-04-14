@@ -20,8 +20,8 @@ def define_intervals(crit_values, crit_monot, a_split):
             Specifies the number of subintervals into which to split each
             criterion's interval.
     """
-    interval_extrema = crit_values.min()
-    interval_extrema['max'] = crit_values.max()
+    # columns of DataFrame: criteria, rows: [min, max]
+    interval_extrema = crit_values.agg(['min', 'max'])
 
 
 def utastar(multicrit_tbl, crit_monot):
