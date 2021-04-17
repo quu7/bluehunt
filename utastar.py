@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import scipy as sp
+#import scipy as sp
 import pandas as pd
 
 def define_intervals(crit_values, crit_monot, a_split):
     """Define value intervals of criteria, given the monotonicity, and the
-    number of points to split each interval.
+    number of points to split each criterion's interval.
     Parameters
     ----------
     crit_values: pandas DataFrame
@@ -16,13 +16,29 @@ def define_intervals(crit_values, crit_monot, a_split):
             An array with boolean values, whose number is equal to that of the
             criteria, defining whether each criterion is increasing (True) or
             decreasing (False).
-    a_split: array
+    a_split: numpy ndarray
             Specifies the number of subintervals into which to split each
             criterion's interval.
     """
+    if not np.all(a_split > 0):
+        raise ValueError('Number of subintervals must be positive.')
     # columns of DataFrame: criteria, rows: [min, max]
     interval_extrema = crit_values.agg(['min', 'max'])
 
+    crit_num = interval_extrema.shape[1]
+    intervals = []
+    for i in range(crit_num):
+        if crit_monot[i]:
+            intervals.append(np.linspace(
+                interval_extrema.iat[0,i],
+                interval_extrema.iat[1,i],
+                a_split[i]+1))
+        elif not crit_monot[i]:
+            intervals.append(np.linspace(
+                interval_extrema.iat[1,i],
+                interval_extrema.iat[0,i],
+                a_split[i]+1))
+    return intervals
 
 def utastar(multicrit_tbl, crit_monot):
     """Run UTASTAR on given data.
