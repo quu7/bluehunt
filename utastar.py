@@ -4,6 +4,9 @@ import numpy as np
 #import scipy as sp
 import pandas as pd
 
+# import scipy as sp
+
+
 def define_intervals(crit_values, crit_monot, a_split):
     """Define value intervals of criteria, given the monotonicity, and the
     number of points to split each criterion's interval.
@@ -19,25 +22,36 @@ def define_intervals(crit_values, crit_monot, a_split):
     a_split: numpy ndarray
             Specifies the number of subintervals into which to split each
             criterion's interval.
+    Returns
+    -------
+    intervals: list
+            List of numpy arrays with the points of subintervals into which each
+            criterion's value interval was split.
     """
     if not np.all(a_split > 0):
-        raise ValueError('Number of subintervals must be positive.')
+        raise ValueError("Number of subintervals must be positive.")
     # columns of DataFrame: criteria, rows: [min, max]
-    interval_extrema = crit_values.agg(['min', 'max'])
+    interval_extrema = crit_values.agg(["min", "max"])
 
     crit_num = interval_extrema.shape[1]
     intervals = []
     for i in range(crit_num):
         if crit_monot[i]:
-            intervals.append(np.linspace(
-                interval_extrema.iat[0,i],
-                interval_extrema.iat[1,i],
-                a_split[i]+1))
+            intervals.append(
+                np.linspace(
+                    interval_extrema.iat[0, i],
+                    interval_extrema.iat[1, i],
+                    a_split[i] + 1,
+                )
+            )
         elif not crit_monot[i]:
-            intervals.append(np.linspace(
-                interval_extrema.iat[1,i],
-                interval_extrema.iat[0,i],
-                a_split[i]+1))
+            intervals.append(
+                np.linspace(
+                    interval_extrema.iat[1, i],
+                    interval_extrema.iat[0, i],
+                    a_split[i] + 1,
+                )
+            )
     return intervals
 
 def utastar(multicrit_tbl, crit_monot):
