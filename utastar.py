@@ -38,17 +38,17 @@ def define_intervals(crit_values, crit_monot, a_split):
         if crit_monot[i]:
             intervals.append(
                 np.linspace(
-                    interval_extrema.iat[0, i],
-                    interval_extrema.iat[1, i],
-                    a_split[i] + 1,
+                    start=interval_extrema.iat[0, i],
+                    stop=interval_extrema.iat[1, i],
+                    num=a_split[i] + 1,
                 )
             )
         elif not crit_monot[i]:
             intervals.append(
                 np.linspace(
-                    interval_extrema.iat[1, i],
-                    interval_extrema.iat[0, i],
-                    a_split[i] + 1,
+                    start=interval_extrema.iat[1, i],
+                    stop=interval_extrema.iat[0, i],
+                    num=a_split[i] + 1,
                 )
             )
     return intervals
