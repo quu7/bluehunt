@@ -5,11 +5,11 @@ from numpy.testing import assert_allclose
 
 # import scipy as sp
 import pandas as pd
-from utastar import *
+from algorithms.utastar import *
 
 
 def test_subinterval_creation():
-    multicrit_tbl = pd.read_csv("public_transport.csv")
+    multicrit_tbl = pd.read_csv("tests/public_transport.csv")
     crit_monot = [False, False, True]
     a_split = np.array([2, 3, 3])
     crit_values = multicrit_tbl.iloc[:, 2:]
