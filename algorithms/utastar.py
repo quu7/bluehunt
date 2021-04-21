@@ -78,6 +78,8 @@ class Criterion(object):
     """Stores criterion's value interval and other related attributes."""
 
     def __init__(self, name, interval):
+        if not isinstance(interval, Interval):
+            raise TypeError(f"{interval} must be an Interval object.")
         self.name = name
         self.interval = interval
 
