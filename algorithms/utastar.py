@@ -167,21 +167,6 @@ def define_intervals(crit_values, crit_monot, a_split):
     return intervals
 
 
-def calc_partial_utility(crit_values, crit_intervals):
-    """Calculate partial utility for each criterion
-    Parameters
-    ----------
-    crit_values: pandas DataFrame
-            Table whose columns correspond to the criteria and rows that
-            correspond to the values of the alternatives on those criteria.
-    crit_intervals: list
-            List of numpy arrays with the points of subintervals into which each
-            criterion's value interval was split.
-    Returns
-    -------
-    """
-
-
 def utastar(multicrit_tbl, crit_monot, a_split):
     """Run UTASTAR on given data.
     Parameters
