@@ -187,3 +187,12 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
         alternatives.append(weights)
 
     alternatives = np.array(alternatives)
+
+    # Calculate differences between each successive pair of alternatives
+    differences = []
+    for i in range(len(alternatives) - 1):
+        differences.append(alternatives[i] - alternatives[i + 1])
+
+    differences = np.array(differences)
+
+    return differences
