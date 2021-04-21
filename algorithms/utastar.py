@@ -108,7 +108,11 @@ class Criterion(object):
 
         weights_array = [0] * len(self.interval)
         for index, subinterval in enumerate(self.interval):
-            if subinterval.isedge(value):
+            # If value is left edge of first subinterval then its utility is 0
+            # and the coefficients of weights should be 0 as well.
+            if index == 0 and subinterval.left == value:
+                break
+            elif subinterval.isedge(value):
                 for i in range(index + 1):
                     weights_array[i] = 1
                 break
@@ -118,6 +122,7 @@ class Criterion(object):
                 weights_array[index] = (value - subinterval.left) / (
                     subinterval.right - subinterval.left
                 )
+                break
         return weights_array
 
 
