@@ -214,4 +214,6 @@ def utastar(multicrit_tbl, crit_monot, a_split):
                     )
                 )
 
-    crit_intervals = define_intervals(multicrit_tbl.iloc[:, 2:], crit_monot, a_split)
+    for i in criteria:
+        print(i)
+        print("---")
