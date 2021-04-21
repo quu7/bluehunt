@@ -172,14 +172,16 @@ def utastar(multicrit_tbl, crit_monot, a_split):
     Parameters
     ----------
     multicrit_tbl: pandas DataFrame
-            The 1st column lists the alternatives, the 2nd contains the
-            user-provided rank of alternatives, and the following ones contain
-            the names and values of the decision criteria.
+        The 1st column lists the alternatives, the 2nd contains the
+        user-provided rank of alternatives, and the following ones contain
+        the names and values of the decision criteria.
     crit_monot: dict
-            A dictionary with criteria names and boolean values, whose number is
-            equal to that of the criteria, defining whether each criterion is
-            increasing (True) or decreasing (False).
+        A dictionary with criteria names and boolean values, whose number is
+        equal to that of the criteria, defining whether each criterion is
+        increasing (True) or decreasing (False).
     a_split: dict
+        A dictionary with names of criteria as keys and values th number of
+        subintervals desired for each criterion's interval segmentation.
     Returns
     -------
 
