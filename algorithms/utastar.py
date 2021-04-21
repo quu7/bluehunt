@@ -190,13 +190,43 @@ def utastar(multicrit_tbl, crit_monot, a_split):
             The 1st column lists the alternatives, the 2nd contains the
             user-provided rank of alternatives, and the following ones contain
             the names and values of the decision criteria.
-    crit_monot: array
-            An array with boolean values, whose number is equal to that of the
-            criteria, defining whether each criterion is increasing (True) or
-            decreasing (False).
+    crit_monot: dict
+            A dictionary with criteria names and boolean values, whose number is
+            equal to that of the criteria, defining whether each criterion is
+            increasing (True) or decreasing (False).
+    a_split: dict
     Returns
     -------
 
     """
+    crit_values = multicrit_tbl.iloc[:, 2:]
+    interval_extrema = crit_values.agg(["min", "max"])
+
+    # List length = number of crit_values's columns
+    criteria = []
+    for criterion in crit_values:
+        if criterion in crit_monot:
+            if crit_monot[criterion]:
+                criteria.append(
+                    Criterion(
+                        name=criterion,
+                        interval=Interval(
+                            interval_extrema.at["min", criterion],
+                            interval_extrema.at["max", criterion],
+                            a_split[criterion],
+                        ),
+                    )
+                )
+            elif not crit_monot[criterion]:
+                criteria.append(
+                    Criterion(
+                        name=criterion,
+                        interval=Interval(
+                            interval_extrema.at["max", criterion],
+                            interval_extrema.at["min", criterion],
+                            a_split[criterion],
+                        ),
+                    )
+                )
 
     crit_intervals = define_intervals(multicrit_tbl.iloc[:, 2:], crit_monot, a_split)
