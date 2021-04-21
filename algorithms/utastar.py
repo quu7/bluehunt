@@ -6,6 +6,119 @@ import pandas as pd
 # import scipy as sp
 
 
+class Subinterval(object):
+    """Represent a subinterval of a criterion's interval of valid values."""
+
+    def __init__(self, left, right):
+        if left == right:
+            raise ValueError("Edges of subinterval cannot be the same.")
+        self.validate(left)
+        self.validate(right)
+        self.left = left
+        self.right = right
+        if right > left:
+            self.monotonicity = True
+        else:
+            self.monotonicity = False
+
+    def __contains__(self, item):
+        if self.monotonicity:
+            return self.left <= item <= self.right
+        elif not self.monotonicity:
+            return self.left >= item >= self.right
+
+    def __repr__(self):
+        return f"[{self.left}, {self.right}]"
+
+    def isedge(self, item):
+        return self.left == item or self.right == item
+
+    def validate(self, num):
+        if not isinstance(num, (int, float, np.integer, np.single, np.double)):
+            raise TypeError(f"{num} must be integer or float.")
+
+
+class Interval(Subinterval):
+    """Interval of valid values that a criterion can take"""
+
+    def __init__(self, left, right, num_of_subintervals):
+        self.validate(left)
+        self.validate(right)
+        if not isinstance(num_of_subintervals, (int, np.integer)):
+            raise TypeError(
+                f"num_of_subintervals, {num_of_subintervals}, must be an integer."
+            )
+        if not num_of_subintervals > 0:
+            raise ValueError("Number of subintervals must be positive.")
+
+        self.left = left
+        self.right = right
+        if right > left:
+            self.monotonicity = True
+        else:
+            self.monotonicity = False
+        array = np.linspace(start=left, stop=right, num=num_of_subintervals + 1)
+        subintervals = [0] * num_of_subintervals
+        for i in range(len(array)):
+            if not array[i] == self.right:
+                subintervals[i] = Subinterval(array[i], array[i + 1])
+        self.subintervals = tuple(subintervals)
+
+    def __len__(self):
+        return len(self.subintervals)
+
+    def __iter__(self):
+        return self.subintervals.__iter__()
+
+    def __next__(self):
+        return self.subintervals.__next__()
+
+
+class Criterion(object):
+    """Stores criterion's value interval and other related attributes."""
+
+    def __init__(self, name, interval):
+        self.name = name
+        self.interval = interval
+
+    def __repr__(self):
+        if self.interval.monotonicity:
+            monotonicity = "ascending"
+        elif not self.interval.monotonicity:
+            monotonicity = "descending"
+        return f"Name: {self.name}\nMonotonicity: {monotonicity}\nInterval: {self.interval}"
+
+    def getvalue(self, value):
+        """Calculate marginal utility of this criterion from an alternative's value
+        Parameters
+        ----------
+        value: int or float
+            Alternative's value in this Criterion.
+        Returns
+        -------
+        weights_array: tuple
+            Coefficients of subinterval weights (w_ij)
+        """
+        if not isinstance(value, (int, float, np.integer, np.single, np.double)):
+            raise TypeError(f"{value} must be integer or float.")
+        if not value >= 0:
+            raise ValueError("Provided value must be non negative.")
+
+        weights_array = [0] * len(self.interval)
+        for index, subinterval in enumerate(self.interval):
+            if subinterval.isedge(value):
+                for i in range(index + 1):
+                    weights_array[i] = 1
+                break
+            elif value in subinterval:
+                for i in range(index):
+                    weights_array[i] = 1
+                weights_array[index] = (value - subinterval.left) / (
+                    subinterval.right - subinterval.left
+                )
+        return weights_array
+
+
 def define_intervals(crit_values, crit_monot, a_split):
     """Define value intervals of criteria, given the monotonicity, and the
     number of points to split each criterion's interval.
