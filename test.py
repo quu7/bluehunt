@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
 import numpy as np
-#import scipy as sp
 import pandas as pd
-from utastar import *
+from algorithms.utastar import *
 
 
-multicrit_tbl = pd.read_csv('public_transport.csv')
-crit_monot = [False, False, True]
-a_split = np.array([2, 3, 3])
-
-crit_values = multicrit_tbl.iloc[:,2:]
+multicrit_tbl = pd.read_csv("tests/public_transport.csv", index_col=0)
+crit_monot = {"Τιμή": False, "Διάρκεια": False, "Άνεση": True}
+a_split = {"Τιμή": 2, "Διάρκεια": 3, "Άνεση": 3}
