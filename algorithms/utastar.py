@@ -178,6 +178,12 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
                     )
                 )
 
-    for i in criteria:
-        print(i)
-        print("---")
+    # Calculate each alternative's utility
+    alternatives = []
+    for alternative in multicrit_tbl.index:
+        weights = []
+        for value, criterion in zip(crit_values.loc[alternative], criteria):
+            weights.extend(criterion.getvalue(value))
+        alternatives.append(weights)
+
+    alternatives = np.array(alternatives)
