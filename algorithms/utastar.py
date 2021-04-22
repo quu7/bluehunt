@@ -2,8 +2,11 @@
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import linprog
 
-# import scipy as sp
+
+class LinearProgramError(Exception):
+    pass
 
 
 class Subinterval(object):
@@ -195,4 +198,67 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
 
     differences = np.array(differences)
 
-    return differences
+    # Part of linear program constraints relating to double error function (σ+
+    # and σ- )
+    error_array = np.zeros([len(differences), len(alternatives) * 2])
+    for difference, i in zip(error_array, range(0, len(differences) * 2, 2)):
+        difference[i] = 1
+        difference[i + 1] = -1
+        difference[i + 2] = -1
+        difference[i + 3] = 1
+
+    # Separate linear program's constraints into inequality and equality
+    # constraints and append them to the apropriate array
+    lp_constraints = np.concatenate((differences, error_array), axis=1)
+
+    A_ub = []
+    A_eq = []
+    b_ub = []
+    b_eq = []
+    for i, row in enumerate(lp_constraints):
+        if multicrit_tbl.iat[i, 0] < multicrit_tbl.iat[i + 1, 0]:
+            A_ub.append(row)
+            b_ub.append(delta)
+        else:
+            A_eq.append(row)
+            b_eq.append(0)
+
+    # Append constraint that ensures all w_ij subinterval variable values sum up
+    # to 1
+    A_eq.append([1] * sum(a_split.values()) + [0] * len(alternatives) * 2)
+    b_eq.append(1)
+
+    c = [0] * sum(a_split.values()) + [1] * len(alternatives) * 2
+
+    A_ub = np.array(A_ub)
+    A_eq = np.array(A_eq)
+    b_ub = np.array(b_ub)
+    b_eq = np.array(b_eq)
+    c = np.array(c)
+
+    # Invert A_ub and b_eq to conform to <= inequalities, instead of >=
+    A_ub = -A_ub
+    b_ub = -b_ub
+
+    print("A_ub")
+    print(A_ub)
+    print("b_ub")
+    print(b_ub)
+    print("A_eq")
+    print(A_eq)
+    print("b_eq")
+    print(b_eq)
+    print("c")
+    print(c)
+
+    # Solve linear program using simplex
+    lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
+    if not lp_res.success:
+        raise LinearProgramError("Linear program could not be solved.")
+
+    w_values = lp_res.x[: sum(a_split.values())]
+    print(w_values)
+
+    utilities = np.dot(alternatives, w_values)
+    print(utilities)
+    return lp_res
