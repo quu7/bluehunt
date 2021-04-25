@@ -95,13 +95,15 @@ class Criterion(object):
 
     def getvalue(self, value):
         """Calculate marginal utility of this criterion from an alternative's value
+
         Parameters
         ----------
-        value: int or float
+        value : float
             Alternative's value in this Criterion.
+
         Returns
         -------
-        weights_array: tuple
+        weights_array : tuple
             Coefficients of subinterval weights (w_ij)
         """
         if not isinstance(value, (int, float, np.integer, np.single, np.double)):
@@ -131,22 +133,23 @@ class Criterion(object):
 
 def utastar(multicrit_tbl, crit_monot, a_split, delta):
     """Run UTASTAR on given data.
+
     Parameters
     ----------
-    multicrit_tbl: pandas DataFrame
+    multicrit_tbl : pandas DataFrame
         The 1st column lists the alternatives (and is the index of the
         DataFrame), the 2nd contains the user-provided rank of alternatives, and
-        the following ones contain the names and values of the decision
-        criteria.
-    crit_monot: dict
+        the following ones contain the names and values of the decision criteria.
+    crit_monot : dict
         A dictionary with criteria names and boolean values, whose number is
         equal to that of the criteria, defining whether each criterion is
         increasing (True) or decreasing (False).
-    a_split: dict
+    a_split : dict
         A dictionary with names of criteria as keys and values the number of
         subintervals desired for each criterion's interval segmentation.
-    delta: float
+    delta : float
         The preference threshold.
+
     Returns
     -------
 
