@@ -170,7 +170,7 @@ class Criteria(object):
         return array
 
 
-def utastar(multicrit_tbl, crit_monot, a_split, delta):
+def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     """Run UTASTAR on given data.
 
     Parameters
@@ -188,6 +188,8 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
         subintervals desired for each criterion's interval segmentation.
     delta : float
         The preference threshold.
+    epsilon : float
+        Small positive float used in determining weights in final preference model.
 
     Returns
     -------
@@ -300,9 +302,61 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
     if not lp_res.success:
         raise LinearProgramError("Linear program could not be solved.")
 
+    # if not lp_res.fun == 0:
+    if lp_res.fun == 0:
+        results = []
+        for criterion in criteria:
+            error_array = np.zeros([len(differences), len(alternatives) * 2])
+            lp_constraints = np.concatenate((differences, error_array), axis=1)
+            A_ub = []
+            A_eq = []
+            b_ub = []
+            b_eq = []
+            for i, row in enumerate(lp_constraints):
+                if multicrit_tbl.iat[i, 0] < multicrit_tbl.iat[i + 1, 0]:
+                    A_ub.append(row)
+                    b_ub.append(delta)
+                else:
+                    A_eq.append(row)
+                    b_eq.append(0)
+
+            # Append constraint that ensures all w_ij subinterval variable values sum up
+            # to 1
+            A_eq.append([1] * sum(a_split.values()) + [0] * len(alternatives) * 2)
+            b_eq.append(1)
+            # Add constraint that ensures sum of errors is less than the value
+            # of the objective function of original linear program plus epsilon.
+            A_ub.append([0] * sum(a_split.values()) + [-1] * len(alternatives) * 2)
+            b_ub.append(-(lp_res.fun + epsilon))
+
+            c = criteria.weight_array(criterion.name) + [0] * len(alternatives) * 2
+
+            A_ub = np.array(A_ub)
+            A_eq = np.array(A_eq)
+            b_ub = np.array(b_ub)
+            b_eq = np.array(b_eq)
+            c = np.array(c)
+
+            # Invert A_ub and b_eq to conform to <= inequalities, instead of >=
+            A_ub = -A_ub
+            b_ub = -b_ub
+
+            res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
+            if res.success:
+                results.append(res)
+                print(res.x)
+            else:
+                print(res.message)
+
+        weights = np.array([x.x for x in results])
+        print(f"Weights: {weights}")
+        avg_results = np.average(weights, axis=1)
+        print("Average weights: ", avg_results[: sum(a_split.values())])
+
     w_values = lp_res.x[: sum(a_split.values())]
     print(w_values)
 
     utilities = np.dot(alternatives, w_values)
     print(utilities)
-    return lp_res
+    # return lp_res
+    return weights
