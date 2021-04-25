@@ -130,6 +130,45 @@ class Criterion(object):
                 break
         return weights_array
 
+    def w(self):
+        return [1] * len(self.interval)
+
+    def e(self):
+        return [0] * len(self.interval)
+
+
+class Criteria(object):
+    "Object containing Criterion objects."
+
+    def __init__(self, criteria):
+        if not isinstance(criteria, (tuple, list)):
+            raise TypeError("Criterion objects must be provided in a tuple or list.")
+        for item in criteria:
+            if not isinstance(item, Criterion):
+                raise TypeError(
+                    "Provided objects must be instances of Criterion class."
+                )
+
+        self.criteria = tuple(criteria)
+
+    def __len__(self):
+        return len(self.criteria)
+
+    def __iter__(self):
+        return self.criteria.__iter__()
+
+    def __next__(self):
+        return self.criteria.__len__()
+
+    def weight_array(self, criterion_name):
+        array = []
+        for index, item in enumerate(self.criteria):
+            if item.name == criterion_name:
+                array.extend(item.w())
+            else:
+                array.extend(item.e())
+        return array
+
 
 def utastar(multicrit_tbl, crit_monot, a_split, delta):
     """Run UTASTAR on given data.
@@ -183,6 +222,8 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta):
                         ),
                     )
                 )
+    # Create Criteria object from list of criteria
+    criteria = Criteria(criteria)
 
     # Calculate each alternative's utility
     alternatives = []
