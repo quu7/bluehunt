@@ -94,7 +94,7 @@ class Criterion(object):
         return f"Name: {self.name}\nMonotonicity: {monotonicity}\nInterval: {self.interval}"
 
     def getvalue(self, value):
-        """Calculate marginal utility of this criterion from an alternative's value
+        """Calculate marginal utility of this criterion from an alternative's value.
 
         Parameters
         ----------
