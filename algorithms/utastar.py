@@ -354,14 +354,23 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
         weights = np.array([x.x for x in results])
         print(f"Weights: {weights}")
-        avg_results = np.average(weights, axis=1)
-        print("Average weights: ", avg_results[: sum(a_split.values())])
+        avg_results = np.average(weights, axis=0)
+        avg_weights = avg_results[: sum(a_split.values())]
+        print("Average weights:")
+        print(avg_weights)
 
-    w_values = lp_res.x[: sum(a_split.values())]
-    print(w_values)
+        utilities = np.dot(alternatives, avg_weights)
+        print("Utilities of alternatives:")
+        print(utilities)
 
-    utilities = np.dot(alternatives, w_values)
-    print(utilities)
-    # return lp_res
-    pdb.set_trace()
-    return weights
+        return avg_weights
+
+    else:
+        w_values = lp_res.x[: sum(a_split.values())]
+        print(w_values)
+
+        utilities = np.dot(alternatives, w_values)
+        print(utilities)
+        # return lp_res
+        # pdb.set_trace()
+        return weights
