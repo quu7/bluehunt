@@ -341,7 +341,10 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             A_ub = -A_ub
             b_ub = -b_ub
 
-            res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
+            # Solve LPs using original LP's optimal solution as Basic Feasible Solution.
+            res = linprog(
+                c, A_ub, b_ub, A_eq, b_eq, method="revised simplex", x0=lp_res.x
+            )
             if res.success:
                 results.append(res)
                 print(res.x)
