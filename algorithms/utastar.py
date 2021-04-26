@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import linprog
+import pdb
 
 
 class LinearProgramError(Exception):
@@ -362,4 +363,5 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     utilities = np.dot(alternatives, w_values)
     print(utilities)
     # return lp_res
+    pdb.set_trace()
     return weights
