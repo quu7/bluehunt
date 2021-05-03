@@ -519,4 +519,4 @@ TSWLatexianTemp*
 *.glstex
 
 # Ignore PDF of report
-report/report.pdf
+report/report*.pdf
