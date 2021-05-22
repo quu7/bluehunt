@@ -39,3 +39,15 @@ async def cover(request):
 
     response = template.render(name=name)
     return html(response)
+
+
+@app.post("/file/upload")
+async def upload_file(request):
+    if request.files:
+        if "multicrit_tbl" in request.files:
+            csv = request.files.get("multicrit_tbl")
+            print(type(csv))
+
+            return text(csv.body.decode())
+
+    return text("Upload successful!")
