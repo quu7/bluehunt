@@ -51,3 +51,14 @@ async def upload_file(request):
             return text(csv.body.decode())
 
     return text("Upload successful!")
+
+heading = ("Μέσο", "Διάταξη", "Τιμή", "Διάρκεια", "Άνεση")
+data = (
+
+    ("RER","1","3","10","1")
+
+)
+
+@app.get("/table")
+async def table(request):
+    return render_template("table.html", heading=heading, data=data)
