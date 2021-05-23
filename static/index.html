@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="author" content="Maroulidis Dimitris Pachakis Myron">
     <meta name="generator" content="Hugo 0.82.0">
-    <title>Hello!</title>
+    <title>Bluehunt</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/cover/">
 
@@ -41,29 +41,26 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
-      <h3 class="float-md-start mb-0">Cover</h3>
+      <h3 class="float-md-start mb-0">Bluehunt</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
         <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="#">Features</a>
-        <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" href="#">About</a>
       </nav>
     </div>
   </header>
 
   <main class="px-3">
-    <h1>Cover your page.</h1>
+    <h1>MINORA Implementation</h1>
     <p class="lead">Hello, {{ name }}!</p>
-    <p class="lead">
-      <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
-    </p>
+    <form action="/file/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="multicrit_tbl" required="required">
+    <button type="submit" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Upload file</button>
+	</form>
   </main>
 
   <footer class="mt-auto text-white-50">
     <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
   </footer>
 </div>
-
-
-    
   </body>
 </html>
