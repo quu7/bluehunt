@@ -52,13 +52,16 @@ async def upload_file(request):
 
     return text("Upload successful!")
 
+
 heading = ("Μέσο", "Διάταξη", "Τιμή", "Διάρκεια", "Άνεση")
-data = (
+data = (("RER", "1", "3", "10", "1"), ("RER", "1", "3", "10", "1"))
 
-    ("RER","1","3","10","1")
-
-)
 
 @app.get("/table")
 async def table(request):
-    return render_template("table.html", heading=heading, data=data)
+    templateLoader = jinja2.FileSystemLoader(searchpath="./static/")
+    templateEnv = jinja2.Environment(loader=templateLoader)
+    template = templateEnv.get_template("table.html")
+
+    response = template.render(heading=heading, data=data)
+    return html(response)
