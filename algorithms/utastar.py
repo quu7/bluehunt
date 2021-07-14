@@ -175,8 +175,13 @@ class Criteria(object):
 
 
 class UtastarResult:
-    def __init__(self):
-        pass
+    def __init__(self, weights, a_split):
+        # The resulting model's weights
+        # NOTE: This is a list containing the coeffiecients of the sum of
+        # partial values of an option's criteria values.
+        self.weights = weights
+        self.num_of_criteria = len(a_split)
+        self.criteria = tuple(a_split.keys())
 
 
 def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
