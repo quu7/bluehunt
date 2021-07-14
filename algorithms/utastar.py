@@ -3,7 +3,10 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import linprog
+
+# Developer imports
 import pdb
+import pprint
 
 
 class LinearProgramError(Exception):
@@ -171,6 +174,11 @@ class Criteria(object):
         return array
 
 
+class UtastarResult:
+    def __init__(self):
+        pass
+
+
 def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     """Run UTASTAR on given data.
 
@@ -196,6 +204,11 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     -------
 
     """
+
+    # Pretty printer initialization
+    # NOTE This is used for debugging purposes only
+    pp = pprint.PrettyPrinter()
+
     crit_values = multicrit_tbl.iloc[:, 1:]
     interval_extrema = crit_values.agg(["min", "max"])
 
@@ -288,18 +301,18 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     b_ub = -b_ub
 
     print("A_ub")
-    print(A_ub)
+    pp.pprint(A_ub)
     print("b_ub")
-    print(b_ub)
+    pp.pprint(b_ub)
     print("A_eq")
-    print(A_eq)
+    pp.pprint(A_eq)
     print("b_eq")
-    print(b_eq)
+    pp.pprint(b_eq)
     print("c")
-    print(c)
+    pp.pprint(c)
 
     # Solve linear program using simplex
-    lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
+    lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
     if not lp_res.success:
         raise LinearProgramError("Linear program could not be solved.")
 
@@ -344,11 +357,11 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
             # Solve LPs using original LP's optimal solution as Basic Feasible Solution.
             res = linprog(
-                c, A_ub, b_ub, A_eq, b_eq, method="revised simplex", x0=lp_res.x
+                c, A_ub, b_ub, A_eq, b_eq, method="interior-point", x0=lp_res.x
             )
             if res.success:
                 results.append(res)
-                print(res.x)
+                print(f"x: {res.x}")
             else:
                 print(res.message)
 
@@ -357,20 +370,22 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
         avg_results = np.average(weights, axis=0)
         avg_weights = avg_results[: sum(a_split.values())]
         print("Average weights:")
-        print(avg_weights)
+        pp.pprint(avg_weights)
 
         utilities = np.dot(alternatives, avg_weights)
         print("Utilities of alternatives:")
-        print(utilities)
+        pp.pprint(utilities)
 
         return avg_weights
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
-        print(w_values)
+        print("w_values of alternatives:")
+        pp.pprint(w_values)
 
         utilities = np.dot(alternatives, w_values)
-        print(utilities)
+        print("Utilities:")
+        pp.pprint(utilities)
         # return lp_res
         # pdb.set_trace()
         return weights
