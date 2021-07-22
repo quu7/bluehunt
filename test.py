@@ -9,4 +9,4 @@ multicrit_tbl = pd.read_csv("tests/public_transport.csv", index_col=0)
 crit_monot = {"Τιμή": False, "Διάρκεια": False, "Άνεση": True}
 a_split = {"Τιμή": 2, "Διάρκεια": 3, "Άνεση": 3}
 
-utastar(multicrit_tbl, crit_monot, a_split, 0.05, 0.01)
+a = utastar(multicrit_tbl, crit_monot, a_split, 0.05, 0.01)

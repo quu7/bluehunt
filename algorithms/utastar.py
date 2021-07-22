@@ -175,13 +175,49 @@ class Criteria(object):
 
 
 class UtastarResult:
-    def __init__(self, weights, a_split):
-        # The resulting model's weights
+    """Contain results from a UTASTAR run.
+
+    Parameters
+    ----------
+    criteria : Criteria iterable
+        Object containing Criterion objects representing the problem's criteria.
+    weights : iterable
+        Coefficients of factors in the weighted sum model created by UTASTAR.
+    w_values : iterable
+        Marginal weights used in calculating an alternative's marginal utility
+        for each criterion.
+    """
+
+    def __init__(self, criteria, w_values):
+        # A Criteria object representing the problem's criteria.
+        self.criteria = criteria
+
+        # The resulting model's weights.
         # NOTE: This is a list containing the coeffiecients of the sum of
-        # partial values of an option's criteria values.
-        self.weights = weights
-        self.num_of_criteria = len(a_split)
-        self.criteria = tuple(a_split.keys())
+        # partial values of an alternative's criteria values.
+        # self.weights = weights
+        pointer = 0
+        weights = []
+        for criterion in criteria:
+            print(type(w_values))
+            print(type(criterion.interval))
+            print(len(criterion.interval))
+            weight = sum(w_values[pointer : pointer + len(criterion.interval)])
+            print(weight)
+            weights.append(weight)
+            pointer += len(criterion.interval)
+        self.weights = tuple(weights)
+        # The w_ij values used in calculating each alternative's marginal
+        # utilities for each criterion.
+        self.w_values = tuple(w_values)
+        self.num_of_criteria = len(criteria)
+
+    def get_utility(self, alt_values):
+        "Calculate utility of a new alternative"
+        weights = []
+        for value, criterion in zip(alt_values, self.criteria):
+            weights.extend(criterion.getvalue(value))
+        return np.dot(weights, self.w_values)
 
 
 def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
@@ -321,8 +357,12 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     if not lp_res.success:
         raise LinearProgramError("Linear program could not be solved.")
 
-    # if not lp_res.fun == 0:
-    if lp_res.fun == 0:
+    # Check for solution multiplicity
+    # If the objective function's optimal value is 0 then multiple optimal
+    # solutions may be present, and in that case we solve LPs to maximize the
+    # weights of each criterion.
+    print(f"[LP] objective function's optimal value: {lp_res.fun}")
+    if np.isclose(lp_res.fun, 0):
         results = []
         for criterion in criteria:
             error_array = np.zeros([len(differences), len(alternatives) * 2])
@@ -361,27 +401,30 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             b_ub = -b_ub
 
             # Solve LPs using original LP's optimal solution as Basic Feasible Solution.
-            res = linprog(
-                c, A_ub, b_ub, A_eq, b_eq, method="interior-point", x0=lp_res.x
-            )
+            # res = linprog(
+            #     c, A_ub, b_ub, A_eq, b_eq, method="interior-point", x0=lp_res.x
+            # )
+            res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
+
             if res.success:
                 results.append(res)
                 print(f"x: {res.x}")
             else:
                 print(res.message)
 
-        weights = np.array([x.x for x in results])
-        print(f"Weights: {weights}")
-        avg_results = np.average(weights, axis=0)
-        avg_weights = avg_results[: sum(a_split.values())]
-        print("Average weights:")
-        pp.pprint(avg_weights)
+        w_values = np.array([result.x for result in results])
+        print(f"w_values: {w_values}")
+        avg_results = np.average(w_values, axis=0)
+        avg_w_values = avg_results[: sum(a_split.values())]
+        print("Average w_values:")
+        pp.pprint(avg_w_values)
 
-        utilities = np.dot(alternatives, avg_weights)
+        utilities = np.dot(alternatives, avg_w_values)
         print("Utilities of alternatives:")
         pp.pprint(utilities)
 
-        return avg_weights
+        # return avg_w_values
+        return UtastarResult(criteria, avg_w_values)
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
@@ -393,4 +436,4 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
         pp.pprint(utilities)
         # return lp_res
         # pdb.set_trace()
-        return weights
+        return UtastarResult(criteria, w_values)
