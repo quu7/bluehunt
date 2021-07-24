@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import linprog
+from scipy.stats import kendalltau
 
 # Developer imports
 import pdb
@@ -181,14 +182,14 @@ class UtastarResult:
     ----------
     criteria : Criteria iterable
         Object containing Criterion objects representing the problem's criteria.
-    weights : iterable
-        Coefficients of factors in the weighted sum model created by UTASTAR.
     w_values : iterable
         Marginal weights used in calculating an alternative's marginal utility
         for each criterion.
+    tau : float
+        Kendal's tau statistic calculated on both rankings of alternatives.
     """
 
-    def __init__(self, criteria, w_values):
+    def __init__(self, criteria, w_values, tau):
         # A Criteria object representing the problem's criteria.
         self.criteria = criteria
 
@@ -211,6 +212,9 @@ class UtastarResult:
         # utilities for each criterion.
         self.w_values = tuple(w_values)
         self.num_of_criteria = len(criteria)
+        # Kendall's tau coefficient calculated between the original and
+        # resulting rankings of alternatives (correlation of rankings).
+        self.tau = tau
 
     def get_utility(self, alt_values):
         "Calculate utility of a new alternative"
@@ -423,8 +427,10 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
         print("Utilities of alternatives:")
         pp.pprint(utilities)
 
+        tau = calculate_tau(multicrit_tbl, utilities)
+        print(f"τ = {tau}")
         # return avg_w_values
-        return UtastarResult(criteria, avg_w_values)
+        return UtastarResult(criteria, avg_w_values, tau)
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
@@ -436,4 +442,15 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
         pp.pprint(utilities)
         # return lp_res
         # pdb.set_trace()
-        return UtastarResult(criteria, w_values)
+        tau = calculate_tau(multicrit_tbl, utilities)
+        print(f"τ = {tau}")
+
+        return UtastarResult(criteria, w_values, tau)
+
+
+def calculate_tau(multicrit_tbl, utilities):
+    original_ranking = multicrit_tbl.copy()
+    original_ranking["Utilities"] = utilities
+    sorted_by_utilities = original_ranking.sort_values("Utilities", ascending=False)
+    c, p = kendalltau(original_ranking.index, sorted_by_utilities.index)
+    return c
