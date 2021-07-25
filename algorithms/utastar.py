@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from itertools import chain
 from scipy.optimize import linprog
 from scipy.stats import kendalltau
 
@@ -98,7 +99,7 @@ class Criterion(object):
             monotonicity = "descending"
         return f"Name: {self.name}\nMonotonicity: {monotonicity}\nInterval: {self.interval}"
 
-    def getvalue(self, value):
+    def get_value(self, value):
         """Calculate marginal utility of this criterion from an alternative's value.
 
         Parameters
@@ -199,18 +200,22 @@ class UtastarResult:
         # self.weights = weights
         pointer = 0
         weights = []
+        w_values_dict = {}
         for criterion in criteria:
             print(type(w_values))
             print(type(criterion.interval))
             print(len(criterion.interval))
-            weight = sum(w_values[pointer : pointer + len(criterion.interval)])
+            crit_w_values = w_values[pointer : pointer + len(criterion.interval)]
+            weight = sum(crit_w_values)
+            w_values_dict[criterion.name] = tuple(crit_w_values)
             print(weight)
             weights.append(weight)
             pointer += len(criterion.interval)
         self.weights = tuple(weights)
         # The w_ij values used in calculating each alternative's marginal
         # utilities for each criterion.
-        self.w_values = tuple(w_values)
+        # self.w_values = tuple(w_values)
+        self.w_values = w_values_dict
         self.num_of_criteria = len(criteria)
         # Kendall's tau coefficient calculated between the original and
         # resulting rankings of alternatives (correlation of rankings).
@@ -220,8 +225,12 @@ class UtastarResult:
         "Calculate utility of a new alternative"
         weights = []
         for value, criterion in zip(alt_values, self.criteria):
-            weights.extend(criterion.getvalue(value))
-        return np.dot(weights, self.w_values)
+            weights.extend(criterion.get_value(value))
+        return np.dot(weights, tuple(chain(*self.w_values.values())))
+
+    def get_crit_weights(self, crit_name):
+        "Return marginal utilities for each subinterval in crit_name."
+        return self.w_values[crit_name]
 
 
 def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
@@ -254,6 +263,8 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     # NOTE This is used for debugging purposes only
     pp = pprint.PrettyPrinter()
 
+    # Sort alternatives by their original ranking.
+    multicrit_tbl.sort_values(multicrit_tbl.columns[0], ascending=False)
     crit_values = multicrit_tbl.iloc[:, 1:]
     interval_extrema = crit_values.agg(["min", "max"])
 
@@ -291,7 +302,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     for alternative in multicrit_tbl.index:
         weights = []
         for value, criterion in zip(crit_values.loc[alternative], criteria):
-            weights.extend(criterion.getvalue(value))
+            weights.extend(criterion.get_value(value))
         alternatives.append(weights)
 
     alternatives = np.array(alternatives)
