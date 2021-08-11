@@ -6,7 +6,7 @@ import logging
 import logging.config
 from algorithms.utastar import *
 
-logging.config.fileConfig("logging.conf")
+logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 
 multicrit_tbl = pd.read_csv("tests/public_transport.csv", index_col=0)
 crit_monot = {"Τιμή": False, "Διάρκεια": False, "Άνεση": True}

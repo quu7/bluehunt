@@ -7,10 +7,6 @@ from scipy.optimize import linprog
 from scipy.stats import kendalltau
 import logging
 
-# Developer imports
-import pdb
-import pprint
-
 # Get module's name for logging
 logger = logging.getLogger(__name__)
 
@@ -206,13 +202,9 @@ class UtastarResult:
         weights = []
         w_values_dict = {}
         for criterion in criteria:
-            print(type(w_values))
-            print(type(criterion.interval))
-            print(len(criterion.interval))
             crit_w_values = w_values[pointer : pointer + len(criterion.interval)]
             weight = sum(crit_w_values)
             w_values_dict[criterion.name] = tuple(crit_w_values)
-            print(weight)
             weights.append(weight)
             pointer += len(criterion.interval)
         self.weights = tuple(weights)
@@ -263,9 +255,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
     """
 
-    # Pretty printer initialization
-    # NOTE This is used for debugging purposes only
-    pp = pprint.PrettyPrinter()
+    logger.info("Applying UTASTAR!")
 
     # Sort alternatives by their original ranking.
     multicrit_tbl.sort_values(multicrit_tbl.columns[0], ascending=False)
@@ -360,16 +350,11 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     A_ub = -A_ub
     b_ub = -b_ub
 
-    print("A_ub")
-    pp.pprint(A_ub)
-    print("b_ub")
-    pp.pprint(b_ub)
-    print("A_eq")
-    pp.pprint(A_eq)
-    print("b_eq")
-    pp.pprint(b_eq)
-    print("c")
-    pp.pprint(c)
+    logger.debug(f"A_ub is\n{A_ub}")
+    logger.debug(f"b_ub is {b_ub}")
+    logger.debug(f"A_eq is\n{A_eq}")
+    logger.debug(f"b_eq is {b_eq}")
+    logger.debug(f"c is {c}")
 
     # Solve linear program using simplex
     lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
@@ -380,9 +365,12 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     # If the objective function's optimal value is 0 then multiple optimal
     # solutions may be present, and in that case we solve LPs to maximize the
     # weights of each criterion.
-    print(f"[LP] objective function's optimal value: {lp_res.fun}")
+    logger.debug(f"Linear program objective function's optimal value: {lp_res.fun}")
     if np.isclose(lp_res.fun, 0):
         results = []
+        logger.debug(
+            "Calculating multiple LPs to optimize w_values for each criterion."
+        )
         for criterion in criteria:
             error_array = np.zeros([len(differences), len(alternatives) * 2])
             lp_constraints = np.concatenate((differences, error_array), axis=1)
@@ -427,44 +415,36 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
             if res.success:
                 results.append(res)
-                print(f"x: {res.x}")
+                logger.debug(f"x:\n{res.x}")
             else:
-                print(res.message)
+                logger.debug(f"Cannot solve LP: {res.message}")
 
         w_values = np.array([result.x for result in results])
-        print(f"w_values: {w_values}")
+        logger.debug(f"w_values:\n{w_values}")
         avg_results = np.average(w_values, axis=0)
         avg_w_values = avg_results[: sum(a_split.values())]
-        print("Average w_values:")
-        pp.pprint(avg_w_values)
+        logger.debug(f"Average w_values:\n{avg_w_values}")
 
         utilities = np.dot(alternatives, avg_w_values)
-        print("Utilities of alternatives:")
-        pp.pprint(utilities)
+        logger.info(f"Utilities of alternatives: {utilities}")
 
         tau = calculate_tau(multicrit_tbl, utilities)
-        print(f"τ = {tau}")
+        logger.info(f"τ = {tau}")
 
-        logger.info("Finished!")
-        print("END OF FUNCTION")
-
+        logger.info("Done!")
         return UtastarResult(criteria, avg_w_values, tau)
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
-        print("w_values of alternatives:")
-        pp.pprint(w_values)
+        logger.debug(f"w_values:\n{w_values}")
 
         utilities = np.dot(alternatives, w_values)
-        print("Utilities:")
-        pp.pprint(utilities)
-        # return lp_res
-        # pdb.set_trace()
-        tau = calculate_tau(multicrit_tbl, utilities)
-        print(f"τ = {tau}")
+        logger.info(f"Utilities of alternatives: {utilities}")
 
-        logger.info("Finished!")
-        print("END OF FUNCTION")
+        tau = calculate_tau(multicrit_tbl, utilities)
+        logger.info(f"τ = {tau}")
+
+        logger.info("Done!")
         return UtastarResult(criteria, w_values, tau)
 
 
