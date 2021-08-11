@@ -5,6 +5,7 @@ import pandas as pd
 import logging
 import logging.config
 from algorithms.utastar import *
+import Colorer
 
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 
