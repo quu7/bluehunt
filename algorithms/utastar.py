@@ -194,10 +194,6 @@ class UtastarResult:
         # A Criteria object representing the problem's criteria.
         self.criteria = criteria
 
-        # The resulting model's weights.
-        # NOTE: This is a list containing the coeffiecients of the sum of
-        # partial values of an alternative's criteria values.
-        # self.weights = weights
         pointer = 0
         weights = []
         w_values_dict = {}
@@ -207,12 +203,18 @@ class UtastarResult:
             w_values_dict[criterion.name] = tuple(crit_w_values)
             weights.append(weight)
             pointer += len(criterion.interval)
+        # The resulting model's weights.
+        # NOTE: This is a list containing the coeffiecients of the sum of
+        # partial values of an alternative's criteria values.
         self.weights = tuple(weights)
+
         # The w_ij values used in calculating each alternative's marginal
         # utilities for each criterion.
         # self.w_values = tuple(w_values)
         self.w_values = w_values_dict
+
         self.num_of_criteria = len(criteria)
+
         # Kendall's tau coefficient calculated between the original and
         # resulting rankings of alternatives (correlation of rankings).
         self.tau = tau
@@ -407,10 +409,6 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             A_ub = -A_ub
             b_ub = -b_ub
 
-            # Solve LPs using original LP's optimal solution as Basic Feasible Solution.
-            # res = linprog(
-            #     c, A_ub, b_ub, A_eq, b_eq, method="interior-point", x0=lp_res.x
-            # )
             res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
 
             if res.success:
