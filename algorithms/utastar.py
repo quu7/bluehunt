@@ -5,10 +5,14 @@ import pandas as pd
 from itertools import chain
 from scipy.optimize import linprog
 from scipy.stats import kendalltau
+import logging
 
 # Developer imports
 import pdb
 import pprint
+
+# Get module's name for logging
+logger = logging.getLogger(__name__)
 
 
 class LinearProgramError(Exception):
@@ -440,7 +444,10 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
         tau = calculate_tau(multicrit_tbl, utilities)
         print(f"τ = {tau}")
-        # return avg_w_values
+
+        logger.info("Finished!")
+        print("END OF FUNCTION")
+
         return UtastarResult(criteria, avg_w_values, tau)
 
     else:
@@ -456,6 +463,8 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
         tau = calculate_tau(multicrit_tbl, utilities)
         print(f"τ = {tau}")
 
+        logger.info("Finished!")
+        print("END OF FUNCTION")
         return UtastarResult(criteria, w_values, tau)
 
 
