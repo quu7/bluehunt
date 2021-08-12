@@ -11,6 +11,7 @@ matplotlib = "*"
 sanic = "*"
 sphinx = "*"
 jinja2 = "*"
+django = "*"
 
 [dev-packages]
 
