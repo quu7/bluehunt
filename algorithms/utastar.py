@@ -352,11 +352,11 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     A_ub = -A_ub
     b_ub = -b_ub
 
-    logger.debug(f"A_ub is\n{A_ub}")
-    logger.debug(f"b_ub is {b_ub}")
-    logger.debug(f"A_eq is\n{A_eq}")
-    logger.debug(f"b_eq is {b_eq}")
-    logger.debug(f"c is {c}")
+    logger.debug("A_ub is\n%s", A_ub)
+    logger.debug("b_ub is %s", b_ub)
+    logger.debug("A_eq is\n%s", A_eq)
+    logger.debug("b_eq is %s", b_eq)
+    logger.debug("c is %s", c)
 
     # Solve linear program using simplex
     lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
@@ -367,7 +367,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     # If the objective function's optimal value is 0 then multiple optimal
     # solutions may be present, and in that case we solve LPs to maximize the
     # weights of each criterion.
-    logger.debug(f"Linear program objective function's optimal value: {lp_res.fun}")
+    logger.debug("Linear program objective function's optimal value: %s", lp_res.fun)
     if np.isclose(lp_res.fun, 0):
         results = []
         logger.debug(
@@ -413,34 +413,34 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
             if res.success:
                 results.append(res)
-                logger.debug(f"x:\n{res.x}")
+                logger.debug("x:\n%s", res.x)
             else:
-                logger.debug(f"Cannot solve LP: {res.message}")
+                logger.debug("Cannot solve LP: %s", res.message)
 
         w_values = np.array([result.x for result in results])
-        logger.debug(f"w_values:\n{w_values}")
+        logger.debug("w_values:\n%s", w_values)
         avg_results = np.average(w_values, axis=0)
         avg_w_values = avg_results[: sum(a_split.values())]
-        logger.debug(f"Average w_values:\n{avg_w_values}")
+        logger.debug("Average w_values:\n%s", avg_w_values)
 
         utilities = np.dot(alternatives, avg_w_values)
-        logger.info(f"Utilities of alternatives: {utilities}")
+        logger.info("Utilities of alternatives: %s", utilities)
 
         tau = calculate_tau(multicrit_tbl, utilities)
-        logger.info(f"τ = {tau}")
+        logger.info("τ = %s", tau)
 
         logger.info("Done!")
         return UtastarResult(criteria, avg_w_values, tau)
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
-        logger.debug(f"w_values:\n{w_values}")
+        logger.debug("w_values:\n%s", w_values)
 
         utilities = np.dot(alternatives, w_values)
-        logger.info(f"Utilities of alternatives: {utilities}")
+        logger.info("Utilities of alternatives: %s", utilities)
 
         tau = calculate_tau(multicrit_tbl, utilities)
-        logger.info(f"τ = {tau}")
+        logger.info("τ = %s", tau)
 
         logger.info("Done!")
         return UtastarResult(criteria, w_values, tau)
