@@ -418,7 +418,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
                 logger.debug("Cannot solve LP: %s", res.message)
 
         w_values = np.array([result.x for result in results])
-        logger.debug("w_values:\n%s", w_values)
+        logger.debug("w_values of LPs:\n%s", w_values)
         avg_results = np.average(w_values, axis=0)
         avg_w_values = avg_results[: sum(a_split.values())]
         logger.debug("Average w_values:\n%s", avg_w_values)
