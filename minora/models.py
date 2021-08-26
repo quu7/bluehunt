@@ -1,4 +1,5 @@
 from django.db import models
+import pandas as pd
 from algorithms.utastar import utastar
 
 # Create your models here.
@@ -10,7 +11,7 @@ class Problem(models.Model):
         """
         Run UTASTAR with model's data.
         """
-        with open(self.problem_file, "rb") as f:
+        with open(self.problem_file.path, "rb") as f:
             problem = pd.read_excel(
                 f,
                 sheet_name=[0, 1],
