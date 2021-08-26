@@ -12,6 +12,7 @@ sanic = "*"
 sphinx = "*"
 jinja2 = "*"
 django = "*"
+openpyxl = "*"
 
 [dev-packages]
 
