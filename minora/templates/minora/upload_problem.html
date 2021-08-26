@@ -1,0 +1,28 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Create new problem.</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+    </head>
+    <body>
+        <form action="{% url 'minora:upload-problem' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h1>Create new problem.</h1></legend>
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                <label for="name">Problem name:</label><br>
+                <input type="text" name="name" id="name"><br>
+                <label for="problem_file">Problem's Excel file:</label><br>
+                <input type="file" id="problem_file" name="problem_file">
+            </fieldset>
+            <input type="submit" value="Create">
+        </form>
+    </body>
+</html>
