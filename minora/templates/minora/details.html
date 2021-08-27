@@ -1,0 +1,43 @@
+<!doctype html>
+<html class="no-js" lang="">
+	<head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Create new problem.</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+    </head>
+    <body>
+        <h1>Current Problem Data</h1> 
+        <table border="1px"> 
+            <tr> 
+                {% for data in DataFrame %} 
+                <th>{{ data }}</th> 
+                {% endfor %} 
+                {% for _, record in DataFrame.iterrows %} 
+            <tr> 
+                {% for value in data %} 
+                    <td>{{ value }}</td> 
+                {% endfor %} 
+            </tr> 
+                {% endfor %} 
+            </tr> 
+        </table> 
+
+        <form action="{}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h1>Set problem variables</h1></legend>
+                <label for="text">Set δ (delta) variable</label><br>
+                <input type="text" name="delta" id="delta"><br>
+                <label for="text">Set ε (epsilon) variable</label><br>
+                <input type="text" name="epsilon" id="epsilon"><br>
+            </fieldset>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>
