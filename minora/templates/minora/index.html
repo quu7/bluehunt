@@ -1,0 +1,27 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Index of problems.</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+    </head>
+    <body>
+        {% if problem_list %}
+            <ul>
+                {% for problem in problem_list %}
+                <li><a href="{% url 'minora:details' problem.id %}">{{ problem.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No problems are available.</p>
+        {% endif %}
+
+        <p><a href="{% url 'minora:upload-problem' %}">Upload new problem!</a></p>
+    </body>
+</html>
