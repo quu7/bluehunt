@@ -3,7 +3,7 @@
 	<head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Create new problem.</title>
+        <title>Problem Details</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,30 +12,25 @@
 
     </head>
     <body>
-        <h1>Current Problem Data</h1> 
-        <table border="1px"> 
-            <tr> 
-                {% for data in DataFrame %} 
-                <th>{{ data }}</th> 
-                {% endfor %} 
-                {% for _, record in DataFrame.iterrows %} 
-            <tr> 
-                {% for value in data %} 
-                    <td>{{ value }}</td> 
-                {% endfor %} 
-            </tr> 
-                {% endfor %} 
-            </tr> 
-        </table> 
+        <h1>Current Problem Data</h1>
+        <strong>Multicriteria table</strong>
+        <div id="multicrit_tbl">
+            {{ multicrit_tbl.to_html | safe }}
+        </div>
+        <br>
+        <strong>Criteria parameters</strong>
+        <div id="crit_param">
+            {{ crit_params.to_html | safe }}
+        </div>
 
         <form action="{}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset>
                 <legend><h1>Set problem variables</h1></legend>
                 <label for="text">Set δ (delta) variable</label><br>
-                <input type="text" name="delta" id="delta"><br>
+                <input type="text" name="delta" id="delta" value="{{ problem.delta  }}"><br>
                 <label for="text">Set ε (epsilon) variable</label><br>
-                <input type="text" name="epsilon" id="epsilon"><br>
+                <input type="text" name="epsilon" id="epsilon" value="{{ problem.epsilon }}"><br>
             </fieldset>
             <input type="submit" value="Submit">
         </form>
