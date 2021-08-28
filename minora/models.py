@@ -9,6 +9,9 @@ class Problem(models.Model):
     delta = models.FloatField(default=0.05)
     epsilon = models.FloatField(default=0.01)
 
+    def __str__(self):
+        return f"{self.name} ({self.problem_file.name}) ({self.id})"
+
     def run_utastar(self):
         """
         Run UTASTAR with model's data.
