@@ -48,3 +48,12 @@ def details(request, problem_id):
             "problem": problem,
         },
     )
+
+def results(request):
+
+    return render(
+        request, 
+        "minora/results.html",
+        )
+
+
