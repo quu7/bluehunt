@@ -1,14 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.views import generic
 from .forms import UploadProblemForm, ProblemParameterForm
 from .models import Problem
 
 # Create your views here.
 
 
-def index(request):
-    return HttpResponse("Hello! You're at the minora app index.")
+class IndexView(generic.ListView):
+    template_name = "minora/index.html"
+    context_object_name = "problem_list"
+
+    def get_queryset(self):
+        """Return all Problems."""
+        return Problem.objects.all()
 
 
 def upload_problem(request):
