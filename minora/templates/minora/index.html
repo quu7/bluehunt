@@ -24,10 +24,10 @@
     <body>
         <div class="container" style="margin-top:2%">
         <div class="jumbotron">
-        <h1 class="display-4">Choose your problem</h1>
+        <h1 class="display-4 offset-md-3">Choose your problem</h1>
         <div class="row d-flex justify-content-center">
         {% if problem_list %}
-            <ul class="list-group col-md-6 text-center mt-5">
+            <ul class="list-group col-md-4 text-center mt-5">
                 {% for problem in problem_list %}
                 <li class="list-group-item list-group-item-action"><a href="{% url 'minora:details' problem.id %}">{{ problem.name }}</a></li>
                 {% endfor %}
