@@ -2,18 +2,34 @@
 <h1>Solved Problem Data</h1>
 <strong>Multicriteria table</strong>
 <div id="multicrit_tbl">
-
+    {{ result.table.to_html|safe  }}
 </div>
 <br>
-<strong>Criteria parameters</strong>
+<p>
+    <strong>Criteria parameters</strong>
+</p>
 <div id="crit_param">
 
 </div>
 <br>
-<strong>Tau of Kentall</strong>
+<p>
+    <strong>Kendall's tau (τ)</strong>
+</p>
 <div id="tau">
-
+    {{ result.tau|floatformat:"-3" }}
 </div>
 <br>
-<strong>Values of weights(w)</strong>
+<p><strong>Values of weights(w)</strong></p>
+<table border="1px">
+    <tr>
+        {% for name in result.w_values.keys %}
+            <th>{{ name }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for value in result.weights %}
+            <td>{{ value|floatformat:"-4" }}</td>
+        {% endfor %}
+    </tr>
+</table>
 {% include 'minora/footer.html' %}
