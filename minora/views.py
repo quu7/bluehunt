@@ -35,7 +35,7 @@ def details(request, problem_id):
         form = ProblemParameterForm(request.POST, instance=problem)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("minora:index"))
+            return HttpResponseRedirect(reverse("minora:results", args=(problem.id,)))
 
     multicrit_tbl, crit_params = problem.get_dataframe()
 
