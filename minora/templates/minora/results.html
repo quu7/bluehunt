@@ -1,25 +1,29 @@
 {% include 'minora/header.html' with title='UTASTAR Results'%}
-<h1>Solved Problem Data</h1>
+<div class="container" style="margin-top:2%">
+<div class="jumbotron text-center">
+<h1 class="display-4">Solved Problem Data</h1>
 <strong>Multicriteria table</strong>
-<div id="multicrit_tbl">
+<div class="row justify-content-center mt-1" id="multicrit_tbl">
     {{ result.table.to_html|safe  }}
 </div>
 <br>
 <p>
-    <strong>Criteria parameters</strong>
+<strong>Criteria parameters</strong>
 </p>
-<div id="crit_param">
+<div class="row justify-content-center" id="crit_param">
 
 </div>
 <br>
 <p>
-    <strong>Kendall's tau (τ)</strong>
+<strong>Kendall's tau (τ)</strong>
 </p>
 <div id="tau">
     {{ result.tau|floatformat:"-3" }}
 </div>
 <br>
 <p><strong>Values of weights(w)</strong></p>
+<div class="row justify-content-center">
+<div class="col-auto">
 <table border="1px">
     <tr>
         {% for name in result.w_values.keys %}
@@ -32,4 +36,14 @@
         {% endfor %}
     </tr>
 </table>
+</div>
+</div>
+{% for image in image_list %}
+<div class="text-center">
+  <img src="data:image/png;base64,{{ image }}" class="rounded" alt="Graphs">
+</div>
+{% endfor %}
+<p class="text-center mt-5"><a href="{% url 'minora:index' %}" class="btn btn-primary" role="button">Try Again!</a></p>
+</div>
+</div>
 {% include 'minora/footer.html' %}
