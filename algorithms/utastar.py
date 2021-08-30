@@ -188,9 +188,12 @@ class UtastarResult:
         for each criterion.
     tau : float
         Kendal's tau statistic calculated on both rankings of alternatives.
+    multicrit_tbl : pandas.DataFrame
+        Multicriteria table of the problem with the last column containing total
+        utilities of alternatives.
     """
 
-    def __init__(self, criteria, w_values, tau):
+    def __init__(self, criteria, w_values, tau, multicrit_tbl):
         # A Criteria object representing the problem's criteria.
         self.criteria = criteria
 
@@ -218,6 +221,8 @@ class UtastarResult:
         # Kendall's tau coefficient calculated between the original and
         # resulting rankings of alternatives (correlation of rankings).
         self.tau = tau
+
+        self.table = multicrit_tbl
 
     def get_utility(self, alt_values):
         "Calculate utility of a new alternative"
@@ -437,8 +442,8 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
     logger.info("τ = %s", tau_c)
 
-        logger.info("Done!")
-        return UtastarResult(criteria, w_values, tau)
+    logger.info("Done!")
+    return UtastarResult(criteria, w_values, tau_c, sorted_by_utilities)
 
 
 def calculate_tau(multicrit_tbl, utilities):
