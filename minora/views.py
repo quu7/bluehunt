@@ -70,7 +70,7 @@ def results(request, problem_id):
         # Normalize values
         values = values / values.max()
 
-        fig, ax = plt.subplots(figsize=(10, 4))
+        fig, ax = plt.subplots(figsize=(5, 3))
         ax.plot(points, values, "-bo")
         ax.xaxis.set_ticks(points)
         ax.set_title(criterion.name)
