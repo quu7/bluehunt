@@ -49,11 +49,10 @@ def details(request, problem_id):
         },
     )
 
-def results(request):
+
+def results(request, problem_id):
 
     return render(
-        request, 
+        request,
         "minora/results.html",
-        )
-
-
+    )

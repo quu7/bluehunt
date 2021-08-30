@@ -30,9 +30,7 @@ class Problem(models.Model):
             crit_monot = crit_options.iloc[:, 0].to_dict()
             a_split = crit_options.iloc[:, 1].to_dict()
 
-            self.result = utastar(
-                multicrit_tbl, crit_monot, a_split, self.delta, self.epsilon
-            )
+            return utastar(multicrit_tbl, crit_monot, a_split, self.delta, self.epsilon)
 
     def get_dataframe(self):
         with open(self.problem_file.path, "rb") as f:
