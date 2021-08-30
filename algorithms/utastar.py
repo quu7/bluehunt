@@ -66,11 +66,11 @@ class Interval(Subinterval):
             self.monotonicity = True
         else:
             self.monotonicity = False
-        array = np.linspace(start=left, stop=right, num=num_of_subintervals + 1)
+        self.points = np.linspace(start=left, stop=right, num=num_of_subintervals + 1)
         subintervals = [0] * num_of_subintervals
-        for i in range(len(array)):
-            if not array[i] == self.right:
-                subintervals[i] = Subinterval(array[i], array[i + 1])
+        for i in range(len(self.points)):
+            if not self.points[i] == self.right:
+                subintervals[i] = Subinterval(self.points[i], self.points[i + 1])
         self.subintervals = tuple(subintervals)
 
     def __len__(self):
@@ -202,6 +202,9 @@ class UtastarResult:
         w_values_dict = {}
         for criterion in criteria:
             crit_w_values = w_values[pointer : pointer + len(criterion.interval)]
+            # Insert missing 0 for first point of interval with 0 partial
+            # utility.
+            crit_w_values = np.concatenate(([0], crit_w_values))
             weight = sum(crit_w_values)
             w_values_dict[criterion.name] = tuple(crit_w_values)
             weights.append(weight)
