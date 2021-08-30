@@ -254,7 +254,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
     Returns
     -------
-
+    TODO
     """
 
     logger.info("Applying UTASTAR!")
@@ -417,30 +417,25 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             else:
                 logger.debug("Cannot solve LP: %s", res.message)
 
-        w_values = np.array([result.x for result in results])
-        logger.debug("w_values of LPs:\n%s", w_values)
-        avg_results = np.average(w_values, axis=0)
-        avg_w_values = avg_results[: sum(a_split.values())]
-        logger.debug("Average w_values:\n%s", avg_w_values)
-
-        utilities = np.dot(alternatives, avg_w_values)
-        logger.info("Utilities of alternatives: %s", utilities)
-
-        tau = calculate_tau(multicrit_tbl, utilities)
-        logger.info("τ = %s", tau)
-
-        logger.info("Done!")
-        return UtastarResult(criteria, avg_w_values, tau)
+        w_values_array = np.array([result.x for result in results])
+        logger.debug("w_values of LPs:\n%s", w_values_array)
+        avg_results = np.average(w_values_array, axis=0)
+        w_values = avg_results[: sum(a_split.values())]
+        logger.debug("Average w_values:\n%s", w_values)
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
         logger.debug("w_values:\n%s", w_values)
 
-        utilities = np.dot(alternatives, w_values)
-        logger.info("Utilities of alternatives: %s", utilities)
+    utilities = np.dot(alternatives, w_values)
+    logger.info("Utilities of alternatives: %s", utilities)
 
-        tau = calculate_tau(multicrit_tbl, utilities)
-        logger.info("τ = %s", tau)
+    # tau = calculate_tau(multicrit_tbl, utilities)
+    multicrit_tbl["Utilities"] = utilities
+    sorted_by_utilities = multicrit_tbl.sort_values("Utilities", ascending=False)
+    tau_c, tau_p = kendalltau(multicrit_tbl.index, sorted_by_utilities.index)
+
+    logger.info("τ = %s", tau_c)
 
         logger.info("Done!")
         return UtastarResult(criteria, w_values, tau)
