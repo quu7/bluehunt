@@ -5,6 +5,14 @@ from django.views import generic
 from .forms import UploadProblemForm, ProblemParameterForm
 from .models import Problem
 
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import io
+import base64
+
 # Create your views here.
 
 
@@ -54,11 +62,30 @@ def results(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     result = problem.run_utastar()
 
+    graphs = []
+    for criterion, values in zip(result.criteria, result.w_values.values()):
+        points = criterion.interval.points
+        values = np.array(values)
+
+        # Normalize values
+        values = values / values.max()
+
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(points, values, "-bo")
+        ax.xaxis.set_ticks(points)
+        ax.set_title(criterion.name)
+
+        filelike = io.BytesIO()
+        fig.savefig(filelike)
+        encoded_fig = base64.b64encode(filelike.getvalue()).decode()
+        graphs.append(encoded_fig)
+
     return render(
         request,
         "minora/results.html",
         {
             "result": result,
             "problem": problem,
+            "image_list": graphs,
         },
     )
