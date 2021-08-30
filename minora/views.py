@@ -51,8 +51,13 @@ def details(request, problem_id):
 
 
 def results(request, problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    result = problem.run_utastar()
 
     return render(
         request,
         "minora/results.html",
+        {
+            "result": result,
+        },
     )
