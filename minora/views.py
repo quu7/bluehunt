@@ -47,15 +47,21 @@ def details(request, problem_id):
 
     multicrit_tbl, crit_params = problem.get_dataframe()
     multicrit_tbl_html = multicrit_tbl.to_html(
-        justify="center",
+        justify="inherit",
         index_names=False,
-        classes="table",
+        classes=[
+            "table",
+            "table-hover",
+        ],
     )
 
     crit_params_html = crit_params.to_html(
-        justify="center",
+        justify="inherit",
         index_names=False,
-        classes="table",
+        classes=[
+            "table",
+            "table-hover",
+        ],
     )
 
     return render(
@@ -74,9 +80,12 @@ def results(request, problem_id):
     result = problem.run_utastar()
 
     multicrit_tbl = result.table.to_html(
-        justify="center",
+        justify="inherit",
         index_names=False,
-        classes="table",
+        classes=[
+            "table",
+            "table-hover",
+        ],
     )
 
     graphs = []
