@@ -46,13 +46,24 @@ def details(request, problem_id):
             return HttpResponseRedirect(reverse("minora:results", args=(problem.id,)))
 
     multicrit_tbl, crit_params = problem.get_dataframe()
+    multicrit_tbl_html = multicrit_tbl.to_html(
+        justify="center",
+        index_names=False,
+        classes="table",
+    )
+
+    crit_params_html = crit_params.to_html(
+        justify="center",
+        index_names=False,
+        classes="table",
+    )
 
     return render(
         request,
         "minora/details.html",
         {
-            "multicrit_tbl": multicrit_tbl,
-            "crit_params": crit_params,
+            "multicrit_tbl": multicrit_tbl_html,
+            "crit_params": crit_params_html,
             "problem": problem,
         },
     )
@@ -61,6 +72,12 @@ def details(request, problem_id):
 def results(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     result = problem.run_utastar()
+
+    multicrit_tbl = result.table.to_html(
+        justify="center",
+        index_names=False,
+        classes="table",
+    )
 
     graphs = []
     for criterion, values in zip(result.criteria, result.w_values.values()):
@@ -87,5 +104,6 @@ def results(request, problem_id):
             "result": result,
             "problem": problem,
             "image_list": graphs,
+            "multicrit_tbl": multicrit_tbl,
         },
     )
