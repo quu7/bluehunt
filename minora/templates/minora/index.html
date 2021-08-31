@@ -7,7 +7,10 @@
 {% if problem_list %}
     <ul class="list-group col-md-4 text-center mt-5">
         {% for problem in problem_list %}
-        <li class="list-group-item list-group-item-action"><a href="{% url 'minora:details' problem.id %}">{{ problem.name }}</a></li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                <a href="{% url 'minora:details' problem.id %}">{{ problem.name }}</a>
+                <a href="{% url 'minora:results' problem.id %}" class="btn btn-primary" role="button">Results</a>
+            </li>
         {% endfor %}
     </ul>
 {% else %}
