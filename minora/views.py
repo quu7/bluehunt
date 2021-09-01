@@ -129,7 +129,7 @@ def evaluate_alternative(request, problem_id):
     if request.method == "POST":
         try:
             if not request.POST["name"]:
-                raise KeyError("Invalid name of alternative.")
+                raise KeyError("Please fill in the alternative's name.")
 
             alt_values = []
             for criterion in criteria:
