@@ -4,46 +4,39 @@
     <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container-fluid py-5 text-center">
 
-<h1 class="display-4">Solved Problem Data</h1>
+<h2>Solved Problem Data</h2>
 <strong>Multicriteria table</strong>
-<div class="row justify-content-center mt-1" id="multicrit_tbl">
+<div class="row justify-content-center mt-1 mb-3" id="multicrit_tbl">
     {{ multicrit_tbl|safe  }}
 </div>
-<br>
 <p>
-<strong>Criteria parameters</strong>
+<strong>Kendall's tau (&tau;)</strong>
 </p>
-<div class="row justify-content-center" id="crit_param">
-
+<div id="tau" class="mb-3">
+    &tau; = {{ result.tau|floatformat:"-3" }}
 </div>
-<br>
-<p>
-<strong>Kendall's tau (τ)</strong>
-</p>
-<div id="tau">
-    {{ result.tau|floatformat:"-3" }}
-</div>
-<br>
 <p><strong>Values of weights(w)</strong></p>
-<div class="row justify-content-center">
+<div class="row justify-content-center mb-3">
 <div class="col-auto">
-<table class="table">
-    <tr>
-        {% for name in result.w_values.keys %}
-            <th>{{ name }}</th>
-        {% endfor %}
-    </tr>
-    <tr>
-        {% for value in result.weights %}
-            <td>{{ value|floatformat:"-4" }}</td>
-        {% endfor %}
-    </tr>
-</table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {% for name in result.w_values.keys %}
+                    <th>{{ name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tr>
+            {% for value in result.weights %}
+                <td>{{ value|floatformat:"-4" }}</td>
+            {% endfor %}
+        </tr>
+    </table>
 </div>
 </div>
-<p class="mt-3"><strong>Partial Value Graphs</strong></p>
+<p class="mb-3"><strong>Partial Value Graphs</strong></p>
 {% for image in image_list %}
-<div class="text-center mt-3">
+<div class="text-center mb-3">
   <img src="data:image/png;base64,{{ image }}" class="rounded" alt="Graphs">
 </div>
 {% endfor %}
