@@ -118,3 +118,84 @@ def results(request, problem_id):
             "multicrit_tbl": multicrit_tbl,
         },
     )
+
+
+def evaluate_alternative(request, problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+
+    multicrit_tbl, crit_params = problem.get_dataframe()
+    criteria = multicrit_tbl.columns[1:]
+
+    if request.method == "POST":
+        try:
+            if not request.POST["name"]:
+                raise KeyError("Invalid name of alternative.")
+
+            alt_values = []
+            for criterion in criteria:
+                if request.POST[criterion]:
+                    alt_values.append(float(request.POST[criterion]))
+                else:
+                    raise ValueError(f"Invalid value for criterion {criterion}.")
+
+            result = problem.run_utastar()
+
+            utility = result.get_utility(alt_values)
+
+            row = [""]
+            row.extend(alt_values)
+            row.append(utility)
+
+            result.table.loc[request.POST["name"]] = row
+            # Sort new table to show new alternative's ranking to
+            # original alternatives.
+            result.table.sort_values("Utilities", ascending=False, inplace=True)
+            multicrit_tbl_html = result.table.to_html(
+                justify="inherit",
+                index_names=False,
+                classes=[
+                    "table",
+                    "table-hover",
+                ],
+            )
+
+            return render(
+                request,
+                "minora/evaluate_alternative.html",
+                {
+                    "problem": problem,
+                    "criteria": criteria,
+                    "multicrit_tbl": multicrit_tbl_html,
+                },
+            )
+
+        except (KeyError, ValueError) as e:
+            error_message = getattr(e, "message", str(e))
+            return render(
+                request,
+                "minora/evaluate_alternative.html",
+                {
+                    "problem": problem,
+                    "criteria": criteria,
+                    "error_message": error_message,
+                },
+            )
+
+    multicrit_tbl_html = multicrit_tbl.to_html(
+        justify="inherit",
+        index_names=False,
+        classes=[
+            "table",
+            "table-hover",
+        ],
+    )
+
+    return render(
+        request,
+        "minora/evaluate_alternative.html",
+        {
+            "problem": problem,
+            "criteria": criteria,
+            "multicrit_tbl": multicrit_tbl_html,
+        },
+    )

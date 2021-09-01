@@ -2,6 +2,7 @@
 {% url 'minora:upload-problem' as upload_url %}
 {% url 'minora:details' problem.id as details_url %}
 {% url 'minora:results' problem.id as results_url %}
+{% url 'minora:evaluate-alternative' problem.id as eval_url %}
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
@@ -22,6 +23,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == results_url %} active {% endif %}" {% if request.path == results_url %} aria-current="page" {% endif %} href="{{ results_url }}">UTASTAR Results</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == eval_url %} active {% endif %}" {% if request.path == eval_url %} aria-current="page" {% endif %} href="{{ eval_url }}">Evaluate New Alternative</a>
                 </li>
             </ul>
         </div>
