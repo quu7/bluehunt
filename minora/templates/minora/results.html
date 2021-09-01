@@ -40,7 +40,10 @@
   <img src="data:image/png;base64,{{ image }}" class="rounded" alt="Graphs">
 </div>
 {% endfor %}
-<p class="text-center mt-5"><a href="{% url 'minora:index' %}" class="btn btn-primary" role="button">Try Again!</a></p>
+<p class="text-center mt-5">
+    <a href="{% url 'minora:index' %}" class="btn btn-primary" role="button">Try Again!</a>
+    <a href="{% url 'minora:evaluate-alternative' problem.id %}" class="btn btn-primary" role="button">Evaluate New Alternative</a>
+</p>
         </div>
     </div>
 </div>
