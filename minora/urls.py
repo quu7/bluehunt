@@ -15,4 +15,7 @@ urlpatterns = [
         views.evaluate_alternative,
         name="evaluate-alternative",
     ),
+    path(
+        "download-model/<int:problem_id>/", views.download_model, name="download-model"
+    ),
 ]

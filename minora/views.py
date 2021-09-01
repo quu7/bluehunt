@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.views import generic
 from .forms import UploadProblemForm, ProblemParameterForm
@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import io
 import base64
+import pandas as pd
 
 # Create your views here.
 
@@ -198,4 +199,26 @@ def evaluate_alternative(request, problem_id):
             "criteria": criteria,
             "multicrit_tbl": multicrit_tbl_html,
         },
+    )
+
+
+def download_model(request, problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    result = problem.run_utastar()
+
+    weights = {}
+    for criterion, weight in zip(result.criteria, result.weights):
+        weights[criterion.name] = weight
+
+    w_values_df = pd.DataFrame.from_dict(result.w_values, orient="index", dtype="float")
+    weights_df = pd.DataFrame.from_dict(weights, orient="index", dtype="float")
+
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer) as writer:
+        weights_df.to_excel(writer, sheet_name="Weights")
+        w_values_df.to_excel(writer, sheet_name="w_ij")
+
+    buffer.seek(0)
+    return FileResponse(
+        buffer, as_attachment=True, filename=f"{problem.name} results.xlsx"
     )
