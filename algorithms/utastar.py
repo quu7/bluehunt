@@ -202,9 +202,6 @@ class UtastarResult:
         w_values_dict = {}
         for criterion in criteria:
             crit_w_values = w_values[pointer : pointer + len(criterion.interval)]
-            # Insert missing 0 for first point of interval with 0 partial
-            # utility.
-            crit_w_values = np.concatenate(([0], crit_w_values))
             weight = sum(crit_w_values)
             w_values_dict[criterion.name] = tuple(crit_w_values)
             weights.append(weight)

@@ -91,7 +91,9 @@ def results(request, problem_id):
     graphs = []
     for criterion, values in zip(result.criteria, result.w_values.values()):
         points = criterion.interval.points
-        values = np.array(values)
+        # Insert missing 0 for first point of interval with 0 partial
+        # utility.
+        values = np.concatenate(([0], values))
 
         # Normalize values
         values = values / values.max()
