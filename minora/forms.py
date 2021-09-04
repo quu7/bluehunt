@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from .models import Problem
 
 
-class UploadProblemForm(ModelForm):
+class ProblemFileForm(ModelForm):
     class Meta:
         model = Problem
         fields = ["name", "problem_file"]

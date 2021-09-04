@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.views import generic
-from .forms import UploadProblemForm, ProblemParameterForm
+from .forms import ProblemFileForm, ProblemParameterForm
 from .models import Problem
 
 import matplotlib
@@ -28,14 +28,34 @@ class IndexView(generic.ListView):
 
 def upload_problem(request):
     if request.method == "POST":
-        form = UploadProblemForm(request.POST, request.FILES)
+        form = ProblemFileForm(request.POST, request.FILES)
         if form.is_valid():
             # file is saved
             problem = form.save()
-            return HttpResponseRedirect(reverse("minora:details", args=(problem.id,)))
+            return redirect("minora:details", problem.id)
     else:
-        form = UploadProblemForm()
+        form = ProblemFileForm()
     return render(request, "minora/upload_problem.html", {"form": form})
+
+
+def replace_problem_file(request, problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    if request.method == "POST":
+        form = ProblemFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            # file is saved
+            new_problem = form.save()
+            return redirect("minora:delete", problem.id, new_problem.id)
+    else:
+        form = ProblemFileForm()
+    return render(
+        request,
+        "minora/replace_problem_file.html",
+        {
+            "problem": problem,
+            "form": form,
+        },
+    )
 
 
 def details(request, problem_id):
@@ -44,7 +64,7 @@ def details(request, problem_id):
         form = ProblemParameterForm(request.POST, instance=problem)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("minora:results", args=(problem.id,)))
+            return redirect("minora:results", problem.id)
 
     multicrit_tbl, crit_params = problem.get_dataframe()
     multicrit_tbl_html = multicrit_tbl.to_html(
@@ -222,3 +242,17 @@ def download_model(request, problem_id):
     return FileResponse(
         buffer, as_attachment=True, filename=f"{problem.name} results.xlsx"
     )
+
+
+def delete_problem(request, old_problem_id, new_problem_id):
+    old_problem = get_object_or_404(Problem, pk=old_problem_id)
+
+    # Delete problem_file from storage
+    old_problem.problem_file.delete(save=False)
+    # and then delete the instance of Problem.
+    old_problem.delete()
+
+    if new_problem_id == 0:
+        return redirect("minora:index")
+
+    return redirect("minora:details", new_problem_id)
