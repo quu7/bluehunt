@@ -265,7 +265,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     logger.info("Applying UTASTAR!")
 
     # Sort alternatives by their original ranking.
-    multicrit_tbl.sort_values(multicrit_tbl.columns[0], ascending=False)
+    multicrit_tbl.sort_values(multicrit_tbl.columns[0], ascending=True, inplace=True)
     crit_values = multicrit_tbl.iloc[:, 1:]
     interval_extrema = crit_values.agg(["min", "max"])
 
