@@ -3,6 +3,7 @@
 {% url 'minora:details' problem.id as details_url %}
 {% url 'minora:results' problem.id as results_url %}
 {% url 'minora:evaluate-alternative' problem.id as eval_url %}
+{% url 'minora:replace-problem' problem.id as replace_url %}
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
@@ -16,7 +17,7 @@
                     <a class="nav-link {% if request.path == home_url %} active {% endif %}" {% if request.path == home_url %} aria-current="page" {% endif %} href="{{ home_url }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == upload_url %} active {% endif %}" {% if request.path == upload_url %} aria-current="page" {% endif %} href="{{ upload_url }}">Upload Problem</a>
+                    <a class="nav-link {% if request.path == replace_url %} active {% endif %}" {% if request.path == replace_url %} aria-current="page" {% endif %} href="{{ replace_url }}">Replace Problem File</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.path == details_url %} active {% endif %}" {% if request.path == details_url %} aria-current="page" {% endif %} href="{{ details_url }}">Problem Details</a>
