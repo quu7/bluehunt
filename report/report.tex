@@ -272,14 +272,14 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/index_no_prob.jpg}
+		\includegraphics[width=0.7\linewidth]{media/index_no_prob.png}
 		\caption{Αρχική σελίδα με κανένα ανεβασμένο πρόβλημα}
 		\label{fig:index_no_prob}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/index_with_prob.jpg}
+		\includegraphics[width=0.7\linewidth]{media/index_with_prob.png}
 		\caption{Αρχική σελίδα με ανεβασμένο πρόβλημα}
 		\label{fig:index_with_prob}
 	\end{figure}
@@ -291,7 +291,7 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/upload.jpg}
+		\includegraphics[width=0.7\linewidth]{media/upload.png}
 		\caption{Σελίδα για μεταφόρτωση ενός προβλήματος}
 		\label{fig:uplaod}
 	\end{figure}
@@ -300,15 +300,56 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/details.jpg}
-		\caption{Σελίδα για προβολή περιεχομένων προβήματος (συγκεκριμένα τα δεδομένα του προβλήματος των μεταφορικών μέσων)}
+		\includegraphics[width=0.7\linewidth]{media/details.png}
+		\caption{Σελίδα για προβολή περιεχομένων προβλήματος (συγκεκριμένα τα δεδομένα του προβλήματος των μεταφορικών μέσων)}
 		\label{fig:details}
 	\end{figure}
 
 	Με το κουμπί \textbf{Submit} θα γίνει επίλυση χρησιμοποιώντας την μέθοδο UTASTAR.
 	
-	\item Παρουσιάζονται τα αποτελέσματα
+	\item Παρουσιάζονται τα αποτελέσματα δηλαδή ο πολυκριτήριος πίνακας με τις τελικές ολικές χρησιμότητες, το $τ$ του Kendall, οι μεταβλητες $w$ του κάθε κριτηρίου και τα διαγράμματα των κανονικοποιημένων μερικών χρησιμοτήτων κάθε κριτηρίου. 
 	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{media/results_1.png}
+		\caption{Τελικός πολυκριτήριος πίνακας, τ του Kendall και διαγράμματα}
+		\label{fig:results_1}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{media/results_2.png}
+		\caption{Τελικός πολυκριτήριος πίνακας, τ του Kendall και διαγράμματα}
+		\label{fig:results_2}
+	\end{figure}
+
+	Στο τέλος υπάρχουν 3 κουμπία μέσα από τα οποία ο χρήστης μπορεί να κάνει κάποιες ενέργειες.
+	
+	\begin{itemize}
+		\item Με το κουμπί \textbf{Retry} δίνεται η δυνατότητα να αντικατασταθεί το τρέχων αρχείο Excel με κάποιο άλλο κατά την βούληση του χρήστη.
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{media/retry.png}
+			\caption{Αντικατάσταση αρχείου Excel με άλλο}
+			\label{fig:retry}
+		\end{figure}
+	
+		Συμπληρώνονται τα στοιχεία με βάση το βήμα 3.
+				
+		\item Με το κουμπί \textbf{Download Generated Model} είναι δυνατόν να γίνει λήψη των αποτελεσμάτων σε μορφή αρχείου Microsoft Excel. 
+		\item Με το κουμπί \textbf{Evaluate New Alternative} μπορεί να προστεθεί επιπλέον εναλλακτική και να υπολογιστούν τα ζητούμενα τρέχοντας πάλι την UTASTAR.
+		
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{media/evaluate.png}
+			\caption{Προσθήκη επιπλέον εναλλακτικής}
+			\label{fig:evaluate}
+		\end{figure}
+		
+		Στο κενό \textbf{New alternative's name:} δίνεται το όνομα της εναλλακτικής και στα κενά \textbf{Value for criterion...:} συμπληρώνεται η τιμή της συγκεκριμένης εναλλακτικής για κάθε κριτήριο.	
+	\end{itemize}
+ 	
 \end{enumerate}
 
 
