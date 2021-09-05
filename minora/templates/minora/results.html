@@ -6,17 +6,15 @@
 
 <h2>Solved Problem Data</h2>
 <p class="font-weight-normal">The multicriteria table of the solved problem is presented below. It contains the same values as the initial uploaded table with the addition of a column that displays the utilities of each alternative.</p>
-<strong>Multicriteria table</strong>
+<h4>Multicriteria table</h4>
 <div class="row justify-content-center mt-1 mb-3" id="multicrit_tbl">
     {{ multicrit_tbl|safe  }}
 </div>
-<p>
-<strong>Kendall's tau (&tau;)</strong>
-</p>
+<h4>Kendall's tau (&tau;)</h4>
 <div id="tau" class="mb-3">
     &tau; = {{ result.tau|floatformat:"-3" }}
 </div>
-<p><strong>Values of weights(w)</strong></p>
+<h4>Values of weights (w)</h4>
 <div class="row justify-content-center mb-3">
 <div class="col-auto">
     <table class="table table-hover">
@@ -35,15 +33,30 @@
     </table>
 </div>
 </div>
-<p class="mb-3"><strong>Partial Value Graphs</strong></p>
+<h4>Partial Value Graphs</h4>
 {% for image in image_list %}
 <div class="text-center mb-3">
   <img src="data:image/png;base64,{{ image }}" class="rounded" alt="Graphs">
 </div>
 {% endfor %}
-<p class="font-weight-normal">Below you can either try uploading a new problem again, or downloading the current solved problem data in an Excel file, or adding a new alternative to the current problem and solve it again.</p>
+<p class="font-weight-normal">
+    If you'd like to change the multicriteria table or other UTASTAR parameters,
+    please click "Retry" to replace the problem's spreadsheet and restart the
+    process again. If you want to change delta (&delta;) or epsilon (&epsilon;) go to the
+    problem's details <a href="{% url 'minora:details' problem.id %}">page</a>.
+</p>
+<p class="font-weight-normal">
+    You can also download the generated model's parameters, namely the weights
+    of criteria in the utility function and the partial weights of each
+    criterion, needed to calculate each alternative's partial utility in that
+    criterion, by clicking the "Download Generated Model" button.
+</p>
+<p class="font-weight-normal">
+    If you'd like to calculate the utility of a new alternative, please click on
+    the "Evaluate New Alternative" button.
+</p>
 <div class="text-center mt-5">
-    <a href="{% url 'minora:index' %}" class="btn btn-primary" role="button">Try Again!</a>
+    <a href="{% url 'minora:replace-problem' problem.id %}" class="btn btn-primary" role="button">Retry</a>
     <a href="{% url 'minora:download-model' problem.id %}" class="btn btn-primary" role="button">Download Generated Model</a>
     <a href="{% url 'minora:evaluate-alternative' problem.id %}" class="btn btn-primary" role="button">Evaluate New Alternative</a>
 </div>

@@ -6,14 +6,26 @@
         <div class="container-fluid py-5 ">
 
 <h2>Current Problem Data</h2>
-<p class="font-weight-normal">The initial uploaded tables can be seen below. In the multicritiria table the first column consist of the alternatives, the second column of the pre-determined layout and the rest columns include the values of the criteria.</p>
-<strong>Multicriteria table</strong>
+<p class="font-weight-normal">
+    This page displays the problem dataset as it was parsed from the problem's
+    file.
+</p>
+<h3>Multicriteria Table</h3>
+<p class="font-weight-normal">
+    The Multicriteria table has several columns. The first one lists the
+    alternatives' names. The second one shows the decision maker's ranking of
+    those alternatives. After that there's a column for each criterion, that
+    lists each alternative's value for that criterion.
+</p>
 <div class="row justify-content-center mt-1" id="multicrit_tbl">
     {{ multicrit_tbl|safe }}
 </div>
 <br>
-<p class="font-weight-normal">In the criteria parameters table the first column consist of the criteria, the second column of the monotonicity of the criterias and the third column includes the number of the equally-spaced subdivisions.</p>
-<strong>Criteria parameters</strong>
+<h3>Criteria parameters</h3>
+<p class="font-weight-normal">
+    The Criteria Parameters table lists each criterion's
+    monotonicity and number of equal-width subdivisions of its value range.
+</p>
 <div class="row justify-content-center mt-1" id="crit_param">
     {{ crit_params|safe }}
 </div>

@@ -6,7 +6,7 @@
 
 <form action="{% url 'minora:replace-problem' problem.id %}" method="post" enctype="multipart/form-data" accept-charset="UTF-8" class="col-md-6 offset-md-3">
     {% csrf_token %}
-        <h1 class="display-4">Replace Problem File for Problem "{{ problem.name }}"</h1>
+        <h1 class="display-6">Replace Problem File for Problem "{{ problem.name }}"</h1>
         <p class="font-weight-normal">You can rename your problem or replace the problem file containing your dataset by uploading another file in Microsoft Excel (.xls, .xlsx) format.</p>
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         <div class="form-group">
