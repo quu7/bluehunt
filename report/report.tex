@@ -258,7 +258,7 @@
 Προαπαιτούμενα για την εκτέλεση του προγράμματος είναι να υπάρχει εγκατεστημένη η γλώσσα προγραμματισμού \href{https://www.python.org/downloads/}{Python} καθώς και το εργαλείο \href{https://pipenv.pypa.io/en/latest/install/}{Pipenv}.
 
 \begin{enumerate}
-	\item Γίνεται unzip στον συμπιεσμένο φάκελο και ανάλογα με το λειτουργικό σύστημα που χρησιμοποιείται ανοίγετε το command window στο directory του φακέλου \{\textbf{.../bluehunt}\} και εκτελείτe τις παρακάτω εντολές:
+	\item Κάνετε unzip τον συμπιεσμένο φάκελο και ανάλογα με το λειτουργικό σύστημα που χρησιμοποιείτε ανοίγετε το command window στο directory του φακέλου \{\textbf{.../bluehunt}\} και εκτελείτε τις παρακάτω εντολές:
 	
 	\begin{verbatim}
 			pipenv install
@@ -266,42 +266,42 @@
 			pipenv shell
 	\end{verbatim}
 	
-	Με αυτόν τον τρόπο θα δημιουργηθεί ένα εικονικό περιβάλλον και θα εγκατασταθούν όλα τα απαραίτητα πακέτα ώστε να γινεί εκτέλεση του προγράμματος.
+	Με αυτόν τον τρόπο δημιουργείται ένα εικονικό περιβάλλον και εγκαθιστούνται όλα τα απαραίτητα πακέτα ώστε να γινεί εκτέλεση του προγράμματος.
 	
 	\item Ανοίγετε το αρχείο \textbf{run.py} και στη συνέχεια κατευθύνεστε στον φυλλομετρητή στην ιστοσελίδα \url{http://127.0.0.1:8000}. Αυτή είναι η αρχική σελίδα του προγράμματος και όπως φαίνεται από την παρακάτω εικόνα περιέχει τα ήδη μεταφορτωμένα προβλήματα (εάν υπάρχουν).
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/index_no_prob.png}
+		\includegraphics[width=\linewidth]{media/index_no_prob.png}
 		\caption{Αρχική σελίδα με κανένα ανεβασμένο πρόβλημα}
 		\label{fig:index_no_prob}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/index_with_prob.png}
+		\includegraphics[width=\linewidth]{media/index_with_prob.png}
 		\caption{Αρχική σελίδα με ανεβασμένο πρόβλημα}
 		\label{fig:index_with_prob}
 	\end{figure}
 	
 	Εάν υπάρχει ήδη ανεβασμένο πρόβλημα τότε πατώντας πάνω στο όνομα του, θα μεταφερθείτε στην σελίδα όπου προβάλονται τα περιεχόμενα του προβλήματος. Με το κουμπί \textbf{Results} παρουσιάζεται αμέσως η λύση του συγκεκριμένου προβλήματος ενώ με το κόκκινο κουμπί διαγράφεται το πρόβλημα από την βάση δεδομένων.
 	
-	Πατώντας το κουμπί \textbf{Upload new problem!} γίνεται δημιουργία ενός καινούργιου προβλήματος.
+	Πατώντας το κουμπί \textbf{Upload new problem!} δημιουργείτε ένα καινούργιο πρόβλημα.
 	
-	\item Για την δημιουργία του καινούργιου προβλήματος είναι απαραίτητο να οριστεί ένα όνομα στο πεδίο \textbf{Problem name:} και να επιλεχθεί πατώντας το κουμπί \textbf{Choose File} το αρχείο της μορφής Microsoft Excel (.xls, .xlsx) όπου περιέχει τα δεδομένα.
+	\item Για την δημιουργία του καινούργιου προβλήματος είναι απαραίτητο να ορίσετε ένα όνομα στο πεδίο \textbf{Problem name:} και να επιλέξετε πατώντας το κουμπί \textbf{Choose File} το αρχείο της μορφής Microsoft Excel (.xls, .xlsx) όπου περιέχει τα δεδομένα.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/upload.png}
+		\includegraphics[width=\linewidth]{media/upload.png}
 		\caption{Σελίδα για μεταφόρτωση ενός προβλήματος}
 		\label{fig:uplaod}
 	\end{figure}
 	
-	\item Πατώντας το κουμπί \textbf{Create} θα γίνει ανακατεύθυνση στη επόμενη σελίδα όπου παρουσιάζονται τα δεδομένα του προβλήματος που μεταφορτώθηκε καθώς επίσης δύναται η ευκαιρία να γίνει αλλαγή στις μεταβλητές $δ$ και $ε$.
+	\item Πατώντας το κουμπί \textbf{Create} ανακατευθύνεστε στη επόμενη σελίδα όπου παρουσιάζονται τα δεδομένα του προβλήματος που μεταφορτώθηκε καθώς επίσης μπορείτε να αλλάξετε τις μεταβλητές $δ$ και $ε$.
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/details.png}
+		\includegraphics[width=\linewidth]{media/details.png}
 		\caption{Σελίδα για προβολή περιεχομένων προβλήματος (συγκεκριμένα τα δεδομένα του προβλήματος των μεταφορικών μέσων)}
 		\label{fig:details}
 	\end{figure}
@@ -312,43 +312,43 @@
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/results_1.png}
+		\includegraphics[width=\linewidth]{media/results_1.png}
 		\caption{Τελικός πολυκριτήριος πίνακας, τ του Kendall και διαγράμματα}
 		\label{fig:results_1}
 	\end{figure}
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{media/results_2.png}
+		\includegraphics[width=\linewidth]{media/results_2.png}
 		\caption{Τελικός πολυκριτήριος πίνακας, τ του Kendall και διαγράμματα}
 		\label{fig:results_2}
 	\end{figure}
 
-	Στο τέλος υπάρχουν 3 κουμπία μέσα από τα οποία ο χρήστης μπορεί να κάνει κάποιες ενέργειες.
+	Στο τέλος υπάρχουν 3 κουμπία μέσα από τα οποία μπορείτε να κάνετε κάποιες ενέργειες.
 	
 	\begin{itemize}
-		\item Με το κουμπί \textbf{Retry} δίνεται η δυνατότητα να αντικατασταθεί το τρέχων αρχείο Excel με κάποιο άλλο κατά την βούληση του χρήστη.
+		\item Με το κουμπί \textbf{Retry} αντικαθιστάτε το τρέχων αρχείο Excel με κάποιο άλλο.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{media/retry.png}
+			\includegraphics[width=\linewidth]{media/retry.png}
 			\caption{Αντικατάσταση αρχείου Excel με άλλο}
 			\label{fig:retry}
 		\end{figure}
 	
-		Συμπληρώνονται τα στοιχεία με βάση το βήμα 3.
+		Συμπληρώνετε τα στοιχεία με βάση το βήμα 3.
 				
-		\item Με το κουμπί \textbf{Download Generated Model} είναι δυνατόν να γίνει λήψη των αποτελεσμάτων σε μορφή αρχείου Microsoft Excel. 
-		\item Με το κουμπί \textbf{Evaluate New Alternative} μπορεί να προστεθεί επιπλέον εναλλακτική και να υπολογιστούν τα ζητούμενα τρέχοντας πάλι την UTASTAR.
+		\item Με το κουμπί \textbf{Download Generated Model} λαμβάνετε τα αποτελέσματα σε μορφή αρχείου Microsoft Excel. 
+		\item Με το κουμπί \textbf{Evaluate New Alternative} προσθέτετε επιπλέον εναλλακτική και υπολογίζετε τα ζητούμενα τρέχοντας πάλι την UTASTAR.
 		
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{media/evaluate.png}
+			\includegraphics[width=\linewidth]{media/evaluate.png}
 			\caption{Προσθήκη επιπλέον εναλλακτικής}
 			\label{fig:evaluate}
 		\end{figure}
 		
-		Στο κενό \textbf{New alternative's name:} δίνεται το όνομα της εναλλακτικής και στα κενά \textbf{Value for criterion...:} συμπληρώνεται η τιμή της συγκεκριμένης εναλλακτικής για κάθε κριτήριο.	
+		Στο κενό \textbf{New alternative's name:} δίνετε το όνομα της εναλλακτικής και στα κενά \textbf{Value for criterion...:} συμπληρώνετε τη τιμή της συγκεκριμένης εναλλακτικής για κάθε κριτήριο.	
 	\end{itemize}
  	
 \end{enumerate}
