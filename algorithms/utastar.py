@@ -437,7 +437,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     utilities = np.dot(alternatives, w_values)
     logger.info("Utilities of alternatives: %s", utilities)
 
-    # tau = calculate_tau(multicrit_tbl, utilities)
+    # Calculate Kendall's tau on original and resulting alternatives' ranking.
     multicrit_tbl["Utilities"] = utilities
     sorted_by_utilities = multicrit_tbl.sort_values("Utilities", ascending=False)
     tau_c, tau_p = kendalltau(multicrit_tbl.index, sorted_by_utilities.index)
@@ -446,29 +446,3 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
     logger.info("Done!")
     return UtastarResult(criteria, w_values, tau_c, sorted_by_utilities)
-
-
-def calculate_tau(multicrit_tbl, utilities):
-    """Run UTASTAR on given data.
-
-    Parameters
-    ----------
-    multicrit_tbl : pandas DataFrame
-        The 1st column lists the alternatives (and is the index of the
-        DataFrame), the 2nd contains the user-provided rank of alternatives, and
-        the following ones contain the names and values of the decision criteria.
-    utilities : numpy.ndarray
-        An array containing utilities of alternatives. The array is index
-        matched to the multicrit_tbl pandas DataFrame. This means that index
-        position 0 corresponds to the first row of the DataFrame.
-
-    Returns
-    -------
-    c : float
-        Kendall's tau correlation between original and final ranking of alternatives.
-    """
-    original_ranking = multicrit_tbl.copy()
-    original_ranking["Utilities"] = utilities
-    sorted_by_utilities = original_ranking.sort_values("Utilities", ascending=False)
-    c, p = kendalltau(original_ranking.index, sorted_by_utilities.index)
-    return c
