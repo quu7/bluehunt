@@ -15,7 +15,7 @@ class LinearProgramError(Exception):
     pass
 
 
-class Subinterval(object):
+class Subinterval:
     """Represent a subinterval of a criterion's interval of valid values."""
 
     def __init__(self, left, right):
@@ -83,7 +83,7 @@ class Interval(Subinterval):
         return self.subintervals.__next__()
 
 
-class Criterion(object):
+class Criterion:
     """Stores criterion's value interval and other related attributes."""
 
     def __init__(self, name, interval):
@@ -143,7 +143,7 @@ class Criterion(object):
         return [0] * len(self.interval)
 
 
-class Criteria(object):
+class Criteria:
     "Object containing Criterion objects."
 
     def __init__(self, criteria):
