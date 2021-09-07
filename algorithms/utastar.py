@@ -259,7 +259,9 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
 
     Returns
     -------
-    TODO
+    UtastarResult : UtastarResult
+        Contains the resulting utilities, weights, w_values and criteria array,
+        among other helper methods, of a utastar() run.
     """
 
     logger.info("Applying UTASTAR!")
