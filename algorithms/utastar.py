@@ -109,7 +109,7 @@ class Criterion:
 
         Returns
         -------
-        weights_array : tuple
+        weights_array : list
             Coefficients of subinterval weights (w_ij)
         """
         if not isinstance(value, (int, float, np.integer, np.single, np.double)):
