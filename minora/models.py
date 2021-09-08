@@ -21,8 +21,8 @@ class Problem(models.Model):
                 f,
                 sheet_name=[0, 1],
                 index_col=0,
-                true_values=["True"],
-                false_values=["False"],
+                true_values=["True", "TRUE", "true"],
+                false_values=["False", "FALSE", "false"],
             )
             multicrit_tbl = problem[0]
             crit_options = problem[1]
@@ -38,8 +38,8 @@ class Problem(models.Model):
                 f,
                 sheet_name=[0, 1],
                 index_col=0,
-                true_values=["True"],
-                false_values=["False"],
+                true_values=["True", "TRUE", "true"],
+                false_values=["False", "FALSE", "false"],
             )
             multicrit_tbl = problem[0]
             crit_options = problem[1]
