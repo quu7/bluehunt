@@ -232,7 +232,7 @@ class UtastarResult:
         return np.dot(weights, tuple(chain(*self.w_values.values())))
 
     def get_crit_weights(self, crit_name):
-        "Return marginal utilities for each subinterval in crit_name."
+        "Return marginal weights for each subinterval in crit_name."
         return self.w_values[crit_name]
 
 
