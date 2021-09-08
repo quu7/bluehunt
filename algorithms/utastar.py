@@ -187,7 +187,7 @@ class UtastarResult:
         Marginal weights used in calculating an alternative's marginal utility
         for each criterion.
     tau : float
-        Kendal's tau statistic calculated on both rankings of alternatives.
+        Kendall's tau statistic calculated on both rankings of alternatives.
     multicrit_tbl : pandas.DataFrame
         Multicriteria table of the problem with the last column containing total
         utilities of alternatives.
