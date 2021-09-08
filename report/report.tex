@@ -308,15 +308,15 @@
 \label{sssec:utastar()}
 H συνάρτηση \texttt{utastar()} είναι υλοποιεί τον αλγόριθμο UTASTAR. H συνάρτηση λαμβάνει ως είσοδο πέντε μεταβλητές:
 \begin{itemize}
-    \item \texttt{multicrit\_tbl} : pandas.DataFrame\\
+    \item \texttt{multicrit\_tbl (pandas.DataFrame)}: 
     Ο πολυκριτήριος πίνακας του προβλήματος. Περιέχει τα δεδομένα του προβλήματος σε συγκεκριμένες στήλες: η πρώτη στήλη περιέχει τα ονόματα των εναλλακτικών, η δεύτερη στήλη την προδιάταξή τους, και οι υπόλοιπες στήλες περιέχουν τις τιμές των εναλλακτικών στα κριτήρια και υπάρχει μία στήλη για κάθε κριτήριο.
-    \item \texttt{crit\_monot} : dict\\
+    \item \texttt{crit\_monot (dict)}: 
     Λεξικό με τα ονόματα κριτηρίων (όπως είναι στις στήλες του πολυκριτηρίου πίνακα) και δυαδικές τιμές (\texttt{True} και \texttt{False}) που δείχνουν την μονοτονία των κριτηρίων. Η τιμή \texttt{True} αντιστοιχεί σε αύξον και η τιμή \texttt{False} σε φθίνον κριτήριο.
-    \item \texttt{a\_split} : dict\\
+    \item \texttt{a\_split (dict)}: 
     Λεξικό με τα ονόματα κριτηρίων (όπως είναι στις στήλες του πολυκριτηρίου πίνακα) και τον αριθμό υποδιαστημάτων στα οποία θα χωριστούν τα διαστήματα τιμών των κριτηρίων.
-    \item \texttt{delta} : float\\
+    \item \texttt{delta (float)}: 
     Η τιμή του κατωφλιού προτίμησης.
-    \item \texttt{epsilon} : float\\
+    \item \texttt{epsilon (float)}: 
     Η τιμή $ \varepsilon $ της μεθόδου UTASTAR.
 \end{itemize}
 
