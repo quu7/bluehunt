@@ -16,21 +16,12 @@ class Problem(models.Model):
         """
         Run UTASTAR with model's data.
         """
-        with open(self.problem_file.path, "rb") as f:
-            problem = pd.read_excel(
-                f,
-                sheet_name=[0, 1],
-                index_col=0,
-                true_values=["True", "TRUE", "true"],
-                false_values=["False", "FALSE", "false"],
-            )
-            multicrit_tbl = problem[0]
-            crit_options = problem[1]
+        multicrit_tbl, crit_options = self.get_dataframe()
 
-            crit_monot = crit_options.iloc[:, 0].to_dict()
-            a_split = crit_options.iloc[:, 1].to_dict()
+        crit_monot = crit_options.iloc[:, 0].to_dict()
+        a_split = crit_options.iloc[:, 1].to_dict()
 
-            return utastar(multicrit_tbl, crit_monot, a_split, self.delta, self.epsilon)
+        return utastar(multicrit_tbl, crit_monot, a_split, self.delta, self.epsilon)
 
     def get_dataframe(self):
         with open(self.problem_file.path, "rb") as f:
