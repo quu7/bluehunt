@@ -82,6 +82,15 @@ class Interval(Subinterval):
     def __next__(self):
         return self.subintervals.__next__()
 
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            if key >= 0 and key < len(self.subintervals):
+                return self.subintervals[key]
+            else:
+                raise IndexError("index out of range")
+        else:
+            return TypeError("key must be of type int")
+
 
 class Criterion:
     """Stores criterion's value interval and other related attributes."""
@@ -98,6 +107,9 @@ class Criterion:
         elif not self.interval.monotonicity:
             monotonicity = "descending"
         return f"Name: {self.name}\nMonotonicity: {monotonicity}\nInterval: {self.interval}"
+
+    def __iter__(self):
+        return self.interval.__iter__()
 
     def get_value(self, value):
         """Calculate marginal utility of this criterion from an alternative's value.
