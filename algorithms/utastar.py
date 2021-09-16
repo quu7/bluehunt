@@ -168,11 +168,11 @@ class Criteria:
 
     def weight_array(self, criterion_name):
         array = []
-        for index, item in enumerate(self.criteria):
-            if item.name == criterion_name:
-                array.extend(item.w())
+        for criterion in self.criteria:
+            if criterion_name == criterion.name:
+                array.extend(criterion.w())
             else:
-                array.extend(item.e())
+                array.extend(criterion.e())
         return array
 
 
@@ -365,7 +365,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     logger.debug("b_eq is %s", b_eq)
     logger.debug("c is %s", c)
 
-    # Solve linear program using simplex
+    # Solve linear program
     lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
     if not lp_res.success:
         raise LinearProgramError("Linear program could not be solved.")
