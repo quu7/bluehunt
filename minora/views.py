@@ -115,6 +115,9 @@ def results(request, problem_id):
         # Insert missing 0 for first point of interval with 0 partial
         # utility.
         values = np.concatenate(([0], values))
+        # To get marginal utility values for each criterion we need to sum w_ij
+        # values to the index of that subinterval.
+        values = np.cumsum(values)
 
         # Normalize values
         values = values / values.max()
