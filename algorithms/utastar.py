@@ -392,7 +392,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     logger.debug("c is %s", c)
 
     # Solve linear program
-    lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
+    lp_res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
     if not lp_res.success:
         raise LinearProgramError("Linear program could not be solved.")
 
@@ -441,8 +441,9 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             # Invert A_ub and b_eq to conform to <= inequalities, instead of >=
             A_ub = -A_ub
             b_ub = -b_ub
-
-            res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="interior-point")
+            c = -c
+            logger.debug("c:\n%s", c)
+            res = linprog(c, A_ub, b_ub, A_eq, b_eq, method="revised simplex")
 
             if res.success:
                 results.append(res)
