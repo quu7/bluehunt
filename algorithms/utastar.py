@@ -178,6 +178,20 @@ class Criteria:
     def __next__(self):
         return self.criteria.__len__()
 
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            for criterion in self.criteria:
+                if key == criterion.name:
+                    return criterion
+            raise KeyError(f"'{key}'")
+        elif isinstance(key, int):
+            if key >= 0 and key < len(self.criteria):
+                return self.criteria[key]
+            else:
+                raise IndexError("index out of range")
+        else:
+            raise TypeError("key must be of type str or int")
+
     def weight_array(self, criterion_name):
         array = []
         for criterion in self.criteria:
