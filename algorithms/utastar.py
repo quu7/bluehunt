@@ -192,6 +192,16 @@ class Criteria:
         else:
             raise TypeError("key must be of type str or int")
 
+    def __contains__(self, item):
+        if isinstance(item, str):
+            try:
+                if self[item]:
+                    return True
+            except KeyError:
+                return False
+        else:
+            raise TypeError("item must be of type str")
+
     def weight_array(self, criterion_name):
         array = []
         for criterion in self.criteria:
