@@ -229,17 +229,24 @@ class UtastarResult:
         utilities of alternatives.
     """
 
-    def __init__(self, criteria, w_values, tau, multicrit_tbl):
+    def __init__(
+        self, criteria, w_values, alternatives, error_array, multicrit_tbl, **kwargs
+    ):
         # A Criteria object representing the problem's criteria.
         self.criteria = criteria
 
         pointer = 0
         weights = []
         w_values_dict = {}
+        partial_utilities_dict = {}
         for criterion in criteria:
+            # w_values
             crit_w_values = w_values[pointer : pointer + len(criterion.interval)]
-            weight = sum(crit_w_values)
             w_values_dict[criterion.name] = tuple(crit_w_values)
+            # Partial utilities
+            partial_utilities_dict[criterion.name] = tuple(np.cumsum(crit_w_values))
+            # Weights
+            weight = sum(crit_w_values)
             weights.append(weight)
             pointer += len(criterion.interval)
         # The resulting model's weights.
@@ -252,13 +259,48 @@ class UtastarResult:
         # self.w_values = tuple(w_values)
         self.w_values = w_values_dict
 
+        # Criterion's partial utilities calculated by adding w_ij values together.
+        self.partial_util = partial_utilities_dict
+
         self.num_of_criteria = len(criteria)
+
+        # Calculate utilities
+        utilities = np.dot(alternatives, w_values)
 
         # Kendall's tau coefficient calculated between the original and
         # resulting rankings of alternatives (correlation of rankings).
-        self.tau = tau
+        instance_tbl = multicrit_tbl.copy()
+        instance_tbl["Utilities"] = utilities
+        sorted_by_utilities = instance_tbl.sort_values("Utilities", ascending=False)
+        tau_c, tau_p = kendalltau(instance_tbl.index, sorted_by_utilities.index)
 
-        self.table = multicrit_tbl
+        self.tau = tau_c
+
+        self.table = sorted_by_utilities
+
+        self.errors = error_array
+
+        # if kwargs["first_sol"] and kwargs["sa_sol"]:
+        if "first_sol" in kwargs and "sa_sol" in kwargs:
+            self.first_sol = UtastarResult(
+                criteria,
+                kwargs["first_sol"][0],
+                alternatives,
+                kwargs["first_sol"][1],
+                multicrit_tbl,
+            )
+            sa_sol_list = []
+            for i in range(len(criteria)):
+                sa_sol_list.append(
+                    UtastarResult(
+                        criteria,
+                        kwargs["sa_sol"][0][i],
+                        alternatives,
+                        kwargs["sa_sol"][1][i],
+                        multicrit_tbl,
+                    )
+                )
+            self.sa_sol = tuple(sa_sol_list)
 
     def get_utility(self, alt_values):
         "Calculate utility of a new alternative"
