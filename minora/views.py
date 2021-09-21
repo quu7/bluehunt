@@ -233,13 +233,17 @@ def download_model(request, problem_id):
     for criterion, weight in zip(result.criteria, result.weights):
         weights[criterion.name] = weight
 
-    w_values_df = pd.DataFrame.from_dict(result.w_values, orient="index", dtype="float")
     weights_df = pd.DataFrame.from_dict(weights, orient="index", dtype="float")
+    w_values_df = pd.DataFrame.from_dict(result.w_values, orient="index", dtype="float")
+    partial_util_df = pd.DataFrame.from_dict(
+        result.partial_util, orient="index", dtype="float"
+    )
 
     buffer = io.BytesIO()
     with pd.ExcelWriter(buffer) as writer:
         weights_df.to_excel(writer, sheet_name="Weights")
         w_values_df.to_excel(writer, sheet_name="w_ij")
+        partial_util_df.to_excel(writer, sheet_name="Partial Utilities")
 
     buffer.seek(0)
     return FileResponse(
