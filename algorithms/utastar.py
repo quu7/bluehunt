@@ -453,6 +453,7 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
     # solutions may be present, and in that case we solve LPs to maximize the
     # weights of each criterion.
     logger.debug("Linear program objective function's optimal value: %s", lp_res.fun)
+
     if np.isclose(lp_res.fun, 0):
         results = []
         logger.debug(
@@ -503,25 +504,46 @@ def utastar(multicrit_tbl, crit_monot, a_split, delta, epsilon):
             else:
                 logger.debug("Cannot solve LP: %s", res.message)
 
-        w_values_array = np.array([result.x for result in results])
-        logger.debug("w_values of LPs:\n%s", w_values_array)
-        avg_results = np.average(w_values_array, axis=0)
-        w_values = avg_results[: sum(a_split.values())]
+        lp_x_array = np.array([result.x for result in results])
+        logger.debug("w_values of LPs:\n%s", lp_x_array)
+        sa_w_array = lp_x_array[:, : sum(a_split.values())]
+        w_values = np.average(sa_w_array, axis=0)
+        # w_values = avg_results[: sum(a_split.values())]
         logger.debug("Average w_values:\n%s", w_values)
+
+        sa_error_array = lp_x_array[:, sum(a_split.values()) :]
+        error_array = np.average(sa_error_array, axis=0)
+
+        first_solution = [
+            lp_res.x[: sum(a_split.values())],
+            lp_res.x[sum(a_split.values()) :],
+        ]
+        sa_solutions = [sa_w_array, sa_error_array]
+
+        utilities = np.dot(alternatives, w_values)
+        logger.info("Utilities of alternatives: %s", utilities)
+
+        logger.info("Done!")
+        return UtastarResult(
+            criteria,
+            w_values,
+            alternatives,
+            error_array,
+            multicrit_tbl,
+            first_sol=first_solution,
+            sa_sol=sa_solutions,
+        )
 
     else:
         w_values = lp_res.x[: sum(a_split.values())]
         logger.debug("w_values:\n%s", w_values)
 
-    utilities = np.dot(alternatives, w_values)
-    logger.info("Utilities of alternatives: %s", utilities)
+        error_array = lp_res.x[sum(a_split.values()) :]
 
-    # Calculate Kendall's tau on original and resulting alternatives' ranking.
-    multicrit_tbl["Utilities"] = utilities
-    sorted_by_utilities = multicrit_tbl.sort_values("Utilities", ascending=False)
-    tau_c, tau_p = kendalltau(multicrit_tbl.index, sorted_by_utilities.index)
+        utilities = np.dot(alternatives, w_values)
+        logger.info("Utilities of alternatives: %s", utilities)
 
-    logger.info("τ = %s", tau_c)
-
-    logger.info("Done!")
-    return UtastarResult(criteria, w_values, tau_c, sorted_by_utilities)
+        logger.info("Done!")
+        return UtastarResult(
+            criteria, w_values, alternatives, error_array, multicrit_tbl
+        )
