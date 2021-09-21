@@ -13,6 +13,7 @@ import numpy as np
 import io
 import base64
 import pandas as pd
+import zipfile
 
 # Create your views here.
 
@@ -232,25 +233,118 @@ def download_model(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     result = problem.run_utastar()
 
-    weights = {}
-    for criterion, weight in zip(result.criteria, result.weights):
-        weights[criterion.name] = weight
+    zipbuffer = io.BytesIO()
+    with zipfile.ZipFile(zipbuffer, "w") as zf:
+        with zf.open("Final_Solution.xlsx", "w") as buffer:
+            weights = {}
+            for criterion, weight in zip(result.criteria, result.weights):
+                weights[criterion.name] = weight
 
-    weights_df = pd.DataFrame.from_dict(weights, orient="index", dtype="float")
-    w_values_df = pd.DataFrame.from_dict(result.w_values, orient="index", dtype="float")
-    partial_util_df = pd.DataFrame.from_dict(
-        result.partial_util, orient="index", dtype="float"
-    )
+            result.table["σ+"] = result.errors[::2]
+            result.table["σ-"] = result.errors[1::2]
+            weights_df = pd.DataFrame.from_dict(weights, orient="index", dtype="float")
+            w_values_df = pd.DataFrame.from_dict(
+                result.w_values, orient="index", dtype="float"
+            )
+            partial_util_df = pd.DataFrame.from_dict(
+                result.partial_util, orient="index", dtype="float"
+            )
+            tau_df = pd.DataFrame.from_dict(
+                {"τ": result.tau}, orient="index", dtype="float"
+            )
 
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer) as writer:
-        weights_df.to_excel(writer, sheet_name="Weights")
-        w_values_df.to_excel(writer, sheet_name="w_ij")
-        partial_util_df.to_excel(writer, sheet_name="Partial Utilities")
+            with pd.ExcelWriter(buffer) as writer:
+                result.table.to_excel(writer, sheet_name="Multicriteria Table")
+                weights_df.to_excel(writer, sheet_name="Weights")
+                w_values_df.to_excel(writer, sheet_name="w_ij")
+                partial_util_df.to_excel(writer, sheet_name="Partial Utilities")
+                tau_df.to_excel(
+                    writer,
+                    sheet_name="Kendall's tau",
+                    float_format="%.3f",
+                    header=False,
+                )
+        if hasattr(result, "first_sol") and hasattr(result, "sa_sol"):
+            with zf.open("Initial_Solution.xlsx", "w") as buffer:
+                weights = {}
+                for criterion, weight in zip(
+                    result.first_sol.criteria, result.first_sol.weights
+                ):
+                    weights[criterion.name] = weight
 
-    buffer.seek(0)
+                result.first_sol.table["σ+"] = result.first_sol.errors[::2]
+                result.first_sol.table["σ-"] = result.first_sol.errors[1::2]
+                weights_df = pd.DataFrame.from_dict(
+                    weights, orient="index", dtype="float"
+                )
+                w_values_df = pd.DataFrame.from_dict(
+                    result.first_sol.w_values, orient="index", dtype="float"
+                )
+                partial_util_df = pd.DataFrame.from_dict(
+                    result.first_sol.partial_util, orient="index", dtype="float"
+                )
+                tau_df = pd.DataFrame.from_dict(
+                    {"τ": result.first_sol.tau}, orient="index", dtype="float"
+                )
+
+                with pd.ExcelWriter(buffer) as writer:
+                    result.first_sol.table.to_excel(
+                        writer, sheet_name="Multicriteria Table"
+                    )
+                    weights_df.to_excel(writer, sheet_name="Weights")
+                    w_values_df.to_excel(writer, sheet_name="w_ij")
+                    partial_util_df.to_excel(writer, sheet_name="Partial Utilities")
+                    tau_df.to_excel(
+                        writer,
+                        sheet_name="Kendall's tau",
+                        float_format="%.3f",
+                        header=False,
+                    )
+
+            for i in range(len(result.sa_sol)):
+                with zf.open(
+                    f"Intermediate_Solution_for_Criterion_{i+1}.xlsx", "w"
+                ) as buffer:
+                    weights = {}
+                    for criterion, weight in zip(
+                        result.sa_sol[i].criteria, result.sa_sol[i].weights
+                    ):
+                        weights[criterion.name] = weight
+
+                    result.sa_sol[i].table["σ+"] = result.sa_sol[i].errors[::2]
+                    result.sa_sol[i].table["σ-"] = result.sa_sol[i].errors[1::2]
+                    weights_df = pd.DataFrame.from_dict(
+                        weights, orient="index", dtype="float"
+                    )
+                    w_values_df = pd.DataFrame.from_dict(
+                        result.sa_sol[i].w_values, orient="index", dtype="float"
+                    )
+                    partial_util_df = pd.DataFrame.from_dict(
+                        result.sa_sol[i].partial_util, orient="index", dtype="float"
+                    )
+                    tau_df = pd.DataFrame.from_dict(
+                        {"τ": result.sa_sol[i].tau}, orient="index", dtype="float"
+                    )
+
+                    with pd.ExcelWriter(buffer) as writer:
+                        result.sa_sol[i].table.to_excel(
+                            writer, sheet_name="Multicriteria Table"
+                        )
+                        weights_df.to_excel(writer, sheet_name="Weights")
+                        w_values_df.to_excel(writer, sheet_name="w_ij")
+                        partial_util_df.to_excel(writer, sheet_name="Partial Utilities")
+                        tau_df.to_excel(
+                            writer,
+                            sheet_name="Kendall's tau",
+                            float_format="%.3f",
+                            header=False,
+                        )
+
+    zipbuffer.seek(0)
     return FileResponse(
-        buffer, as_attachment=True, filename=f"{problem.name} results.xlsx"
+        zipbuffer,
+        as_attachment=True,
+        filename=f"{problem.name.replace(' ', '_')}_results.zip",
     )
 
 
