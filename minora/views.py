@@ -100,6 +100,9 @@ def results(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     result = problem.run_utastar()
 
+    result.table["σ+"] = result.errors[::2]
+    result.table["σ-"] = result.errors[1::2]
+
     multicrit_tbl = result.table.to_html(
         justify="inherit",
         index_names=False,
