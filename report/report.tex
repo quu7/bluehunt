@@ -64,6 +64,9 @@
 % Code highlighting
 \usepackage{minted}
 
+% Hyperref
+\usepackage{hyperref}
+
 % Comments
 \usepackage{comment}
 
@@ -418,10 +421,12 @@ H συνάρτηση \texttt{utastar()} είναι υλοποιεί τον αλ�
 \section{Οδηγίες Χρήσης}
 \label{sec:instructions}
 
-Για την εκτέλεση του προγράμματος πρέπει να υπάρχει εγκατεστημένη η γλώσσα προγραμματισμού \href{https://www.python.org/downloads/}{Python} και το εργαλείο \href{https://pipenv.pypa.io/en/latest/install/}{Pipenv}.
+Για την εκτέλεση του προγράμματος πρέπει να υπάρχει εγκατεστημένη η γλώσσα προγραμματισμού \href{https://www.python.org/downloads/}{Python}
+\footnote{\href {https://www.python.org/downloads/}{python.org/downloads/}} και το εργαλείο \href{https://pipenv.pypa.io/en/latest/install/}{Pipenv}
+\footnote{\href {https://pipenv.pypa.io/en/latest/install/}{pipenv.pypa.io/en/latest/install/}}.
 
 \begin{enumerate}
-	\item Αποσυμπιέζετε τον συμπιεσμένο αρχείο και ανάλογα με το λειτουργικό σύστημα που χρησιμοποιείτε ανοίγετε τη γραμμή εντολών ή το τερματικό στον φάκελο \texttt{bluehunt} και εκτελείτε τις παρακάτω εντολές για να δημιουργήσετε ένα εικονικό περιβάλλον (virtual environment) με όλα τα πακέτα (packages) που χρειάζονται για την εκτέλεση του προγράμματος.
+	\item Αποσυμπιέζετε το συμπιεσμένο αρχείο και ανάλογα με το λειτουργικό σύστημα που χρησιμοποιείτε ανοίγετε τη γραμμή εντολών ή το τερματικό στον φάκελο \texttt{bluehunt} και εκτελείτε τις παρακάτω εντολές για να δημιουργήσετε ένα εικονικό περιβάλλον (virtual environment) με όλα τα πακέτα (packages) που χρειάζονται για την εκτέλεση του προγράμματος.
 	
 	\begin{verbatim}
 			pipenv install
