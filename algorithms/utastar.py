@@ -227,6 +227,18 @@ class UtastarResult:
     multicrit_tbl : pandas.DataFrame
         Multicriteria table of the problem with the last column containing total
         utilities of alternatives.
+    first_sol : list
+        List with 2 elements. The first is a w_values array and the second is an
+        error array, twice as long as the number of alternatives in the problem.
+        It's used to construct a child UtastarResult object representing the
+        original solution.
+    sa_sol : list
+        List with 2 elements. The first is a w_values array and the second is an
+        error array, twice as long as the number of alternatives in the problem.
+        Each array has as many rows as the number of criteria and represent the
+        solutions of linear programs during sensitivity analysis. The list is
+        used to construct child UtastarResult objects representing each
+        criterion's LP in sensitivity analysis.
     """
 
     def __init__(
